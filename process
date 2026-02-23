@@ -1,0 +1,311 @@
+<style>
+/* ===== 리셋 & 기본 ===== */
+.bm-process {
+  font-family: var(--font-family-body);
+  background-color: {{property.bgColor}};
+  padding: {{property.paddingTopDesktop}}px {{property.paddingRightDesktop}}px {{property.paddingBottomDesktop}}px {{property.paddingLeftDesktop}}px;
+  box-sizing: border-box;
+}
+.bm-process *, .bm-process *::before, .bm-process *::after {
+  box-sizing: border-box;
+}
+.bm-process p { margin: 0; }
+.bm-process strong { font-weight: 700; }
+.bm-process em, .bm-process i { font-style: italic; }
+
+/* ===== 내부 래퍼 ===== */
+.bm-process__inner {
+  {{#if property.useMaxWidth}}
+  max-width: {{property.maxWidth}}px;
+  {{/if}}
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ===== 섹션 헤더 ===== */
+.bm-process__header {
+  margin-bottom: {{property.headerBottomGap}}px;
+}
+.bm-process__title {
+  font-family: var(--font-family-heading);
+  font-size: {{property.titlePcSize}}px;
+  line-height: 1.3;
+}
+
+/* ===== 카드 그리드 ===== */
+.bm-process__grid {
+  display: flex;
+  gap: {{property.cardGap}}px;
+  {{#if (eq property.desktopLayout 'wrap')}}
+  flex-wrap: wrap;
+  {{else}}
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  {{/if}}
+}
+.bm-process__grid::-webkit-scrollbar { display: none; }
+
+/* ===== 카드 아이템 (flex 균등 분할) ===== */
+.bm-process__item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.bm-process__item.is-animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== 카드 원형 컨테이너 ===== */
+.bm-process__card {
+  width: 100%;
+  padding: {{property.cardPadding}}px;
+  background-color: {{property.cardBgColor}};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* -- 원형 카드 -- */
+{{#if (eq property.cardShape 'circle')}}
+.bm-process__card {
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+{{else}}
+.bm-process__card {
+  border-radius: {{property.cardBorderRadius}}px;
+  padding-top: {{property.cardPadding}}px;
+  padding-bottom: {{property.cardPadding}}px;
+}
+{{/if}}
+
+/* -- 카드 스타일 변형 -- */
+{{#if (eq property.cardStyle 'default')}}
+.bm-process__card { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+{{/if}}
+{{#if (eq property.cardStyle 'border')}}
+.bm-process__card { border: {{property.cardBorderWidth}}px solid {{property.cardBorderColor}}; }
+{{/if}}
+{{#if (eq property.cardStyle 'elevated')}}
+.bm-process__card { box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+{{/if}}
+{{#if (eq property.cardStyle 'minimal')}}
+.bm-process__card { background-color: transparent; }
+{{/if}}
+
+/* ===== 아이콘 ===== */
+.bm-process__icon-wrap {
+  width: {{property.iconSize}}px;
+  height: {{property.iconSize}}px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+.bm-process__icon-wrap i {
+  font-size: {{property.iconSize}}px;
+  color: {{property.iconColor}};
+  line-height: 1;
+}
+
+/* ===== 텍스트 ===== */
+.bm-process__step-num {
+  font-size: {{property.stepNumPcSize}}px;
+  color: {{property.stepNumberColor}};
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.bm-process__card-title {
+  font-family: var(--font-family-heading);
+  font-size: {{property.cardTitlePcSize}}px;
+  color: {{property.cardTitleColor}};
+  line-height: 1.3;
+}
+.bm-process__card-desc {
+  font-size: {{property.cardDescPcSize}}px;
+  color: {{property.cardDescColor}};
+  line-height: 1.5;
+  white-space: pre-line;
+  margin-top: 4px;
+}
+
+/* ===== 모바일 ===== */
+@media (max-width: 700px) {
+  .bm-process {
+    padding: {{property.paddingTopMobile}}px {{property.paddingRightMobile}}px {{property.paddingBottomMobile}}px {{property.paddingLeftMobile}}px;
+  }
+  .bm-process__title {
+    font-size: {{property.titleMoSize}}px;
+  }
+  .bm-process__step-num {
+    font-size: {{property.stepNumMoSize}}px;
+  }
+  .bm-process__card-title {
+    font-size: {{property.cardTitleMoSize}}px;
+  }
+  .bm-process__card-desc {
+    font-size: {{property.cardDescMoSize}}px;
+  }
+
+  /* 모바일 - 세로 스택 (1열) */
+  {{#if (eq property.mobileLayout 'stack')}}
+  .bm-process__grid {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+  }
+  .bm-process__item {
+    flex: none;
+    width: 100%;
+  }
+  {{#if (eq property.cardShape 'circle')}}
+  .bm-process__card {
+    width: 140px;
+    margin: 0 auto;
+  }
+  {{/if}}
+  {{/if}}
+
+  /* 모바일 - 2열 그리드 */
+  {{#if (eq property.mobileLayout 'grid2')}}
+  .bm-process__grid {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+  .bm-process__item {
+    flex: none;
+    width: calc(50% - {{divide property.cardGap 2}}px);
+  }
+  {{#if (eq property.cardShape 'circle')}}
+  .bm-process__card {
+    width: 100%;
+    margin: 0 auto;
+  }
+  {{/if}}
+  {{/if}}
+
+  /* 모바일 - 가로 스크롤 */
+  {{#if (eq property.mobileLayout 'scroll')}}
+  .bm-process__grid {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .bm-process__item {
+    flex: 0 0 120px;
+    min-width: 120px;
+  }
+  {{/if}}
+}
+</style>
+<template>
+<div class="bm-process">
+  <div class="bm-process__inner">
+
+    <div class="bm-process__header">
+      <div class="bm-process__title">{{{property.sectionTitle}}}</div>
+    </div>
+
+    <div class="bm-process__grid">
+      {{#each property.steps}}
+      <div class="bm-process__item" data-index="{{@index}}">
+
+        <div class="bm-process__card">
+          <div class="bm-process__icon-wrap">
+            <i class="ph {{icon}}"></i>
+          </div>
+          <div class="bm-process__step-num">{{stepNumber}}</div>
+          <div class="bm-process__card-title">{{title}}</div>
+        </div>
+
+        {{#if description}}
+        <div class="bm-process__card-desc">{{description}}</div>
+        {{/if}}
+
+      </div>
+      {{/each}}
+    </div>
+
+  </div>
+</div>
+</template>
+
+<script>
+var container = bm.container;
+var context = bm.context;
+var observer = null;
+
+/* ===== 초기화 ===== */
+function init() {
+  setupAnimation();
+}
+
+/* ===== 순차 애니메이션 ===== */
+function setupAnimation() {
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+
+  var items = container.querySelectorAll('.bm-process__item');
+  if (!items.length) return;
+
+  var enableAnim = context.property.enableAnimation;
+  var delay = context.property.animationDelay || 100;
+
+  if (!enableAnim) {
+    for (var i = 0; i < items.length; i++) {
+      items[i].classList.add('is-animate');
+      items[i].style.transitionDelay = '0ms';
+    }
+    return;
+  }
+
+  /* 초기화 */
+  for (var i = 0; i < items.length; i++) {
+    items[i].classList.remove('is-animate');
+    items[i].style.transitionDelay = (i * delay) + 'ms';
+  }
+
+  observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-animate');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  for (var i = 0; i < items.length; i++) {
+    observer.observe(items[i]);
+  }
+}
+
+/* ===== 실행 ===== */
+init();
+
+bm.onContextChange = function() {
+  init();
+};
+
+bm.onDestroy = function() {
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+};
+</script>
+
+{"settings":[{"type":"TITLE","content":"누끼토끼 전문 개발 블록"},{"type":"DESCRIPTION","content":"【 안내 】\n코드 없이 직접 운영하실 수 있도록\n전문 개발자가 기획·설계·구현했습니다.\n간단한 수정은 블록 AI를 활용하시고,\n고도화된 커스텀이 필요하시면\n전문가에게 의뢰해 주세요."},{"type":"TITLE","content":"📋 섹션 헤더"},{"type":"RICH_TEXT","id":"sectionTitle","label":"섹션 타이틀","default":"<p style=\"text-align:center\">서비스 진행순서 안내</p>"},{"type":"RANGE","id":"titlePcSize","label":"↳ 타이틀 PC 글씨 크기","min":18,"max":52,"step":1,"unit":"px","default":32},{"type":"RANGE","id":"titleMoSize","label":"↳ 타이틀 모바일 글씨 크기","min":16,"max":36,"step":1,"unit":"px","default":24},{"type":"RANGE","id":"headerBottomGap","label":"헤더 ↔ 카드 간격","min":16,"max":80,"step":4,"unit":"px","default":40},{"type":"TITLE","content":"📐 레이아웃"},{"type":"CHECKBOX","id":"useMaxWidth","label":"최대 너비 사용","default":true},{"type":"RANGE","id":"maxWidth","label":"↳ 콘텐츠 최대 너비","min":600,"max":1600,"step":40,"unit":"px","default":1200,"isVisible":"property.useMaxWidth == true"},{"type":"RADIO","id":"desktopLayout","label":"PC 레이아웃","options":[{"value":"nowrap","label":"한 줄 (스크롤)"},{"value":"wrap","label":"자동 줄바꿈"}],"default":"nowrap"},{"id":"mobileLayout","label":"모바일 레이아웃","options":[{"value":"stack","label":"세로 1열"},{"value":"grid2","label":"2열 그리드"},{"value":"scroll","label":"가로 스크롤"}],"optionLabelType":"text","defaultIndex":2,"type":"RADIO"},{"type":"RANGE","id":"cardGap","label":"카드 간격","min":0,"max":50,"step":4,"unit":"px","default":20},{"type":"TITLE","content":"📏 여백 (데스크톱)"},{"type":"RANGE","id":"paddingTopDesktop","label":"상단 여백","min":0,"max":120,"step":4,"unit":"px","default":60},{"type":"RANGE","id":"paddingBottomDesktop","label":"하단 여백","min":0,"max":120,"step":4,"unit":"px","default":60},{"type":"RANGE","id":"paddingLeftDesktop","label":"좌측 여백","min":0,"max":120,"step":4,"unit":"px","default":20},{"type":"RANGE","id":"paddingRightDesktop","label":"우측 여백","min":0,"max":120,"step":4,"unit":"px","default":20},{"type":"TITLE","content":"📏 여백 (모바일)"},{"type":"RANGE","id":"paddingTopMobile","label":"상단 여백","min":0,"max":80,"step":4,"unit":"px","default":40},{"type":"RANGE","id":"paddingBottomMobile","label":"하단 여백","min":0,"max":80,"step":4,"unit":"px","default":40},{"type":"RANGE","id":"paddingLeftMobile","label":"좌측 여백","min":0,"max":80,"step":4,"unit":"px","default":16},{"type":"RANGE","id":"paddingRightMobile","label":"우측 여백","min":0,"max":80,"step":4,"unit":"px","default":16},{"type":"TITLE","content":"✏️ 단계 목록"},{"type":"LIST","id":"steps","label":"진행 단계","maxCount":10,"settings":[{"type":"TEXT","id":"stepNumber","label":"단계 번호","default":"STEP 01"},{"type":"TEXT","id":"title","label":"단계 제목","default":"단계 제목"},{"type":"SELECT","id":"icon","label":"아이콘","options":[{"value":"ph-clipboard-text","label":"주문확인"},{"value":"ph-paint-brush","label":"디자인작업"},{"value":"ph-wrench","label":"맞춤제작"},{"value":"ph-fire","label":"가마소성"},{"value":"ph-gift","label":"선물포장"},{"value":"ph-truck","label":"발송"},{"value":"ph-check-circle","label":"체크"},{"value":"ph-palette","label":"팔레트"},{"value":"ph-hammer","label":"망치"},{"value":"ph-flame","label":"불꽃"},{"value":"ph-package","label":"박스"},{"value":"ph-airplane","label":"비행기"},{"value":"ph-shopping-cart","label":"장바구니"},{"value":"ph-users","label":"사용자"},{"value":"ph-chats","label":"채팅"},{"value":"ph-lightbulb","label":"전구"},{"value":"ph-heart","label":"하트"},{"value":"ph-star","label":"별"},{"value":"ph-trophy","label":"트로피"},{"value":"ph-rocket","label":"로켓"},{"value":"ph-chart-line","label":"차트"},{"value":"ph-gear","label":"설정"},{"value":"ph-handshake","label":"악수"},{"value":"ph-file-text","label":"문서"}],"default":"ph-check-circle"},{"type":"TEXTAREA","id":"description","label":"상세 설명 (선택사항)","default":""}]},{"type":"TITLE","content":"✏️ 텍스트 크기"},{"type":"RANGE","id":"stepNumPcSize","label":"단계번호 PC 글씨 크기","min":8,"max":16,"step":1,"unit":"px","default":11},{"type":"RANGE","id":"stepNumMoSize","label":"단계번호 모바일 글씨 크기","min":8,"max":14,"step":1,"unit":"px","default":10},{"type":"RANGE","id":"cardTitlePcSize","label":"카드 제목 PC 글씨 크기","min":12,"max":28,"step":1,"unit":"px","default":18},{"type":"RANGE","id":"cardTitleMoSize","label":"카드 제목 모바일 글씨 크기","min":11,"max":22,"step":1,"unit":"px","default":15},{"type":"RANGE","id":"cardDescPcSize","label":"카드 설명 PC 글씨 크기","min":11,"max":18,"step":1,"unit":"px","default":13},{"type":"RANGE","id":"cardDescMoSize","label":"카드 설명 모바일 글씨 크기","min":10,"max":16,"step":1,"unit":"px","default":12},{"type":"TITLE","content":"🎨 카드 디자인"},{"type":"RADIO","id":"cardShape","label":"카드 모양","options":[{"value":"rectangle","label":"사각형"},{"value":"circle","label":"원형"}],"default":"circle"},{"type":"RANGE","id":"circleSize","label":"↳ 원형 카드 크기","min":120,"max":300,"step":10,"unit":"px","default":150,"isVisible":"property.cardShape == 'circle'"},{"type":"RANGE","id":"cardBorderRadius","label":"↳ 모서리 둥글기","min":0,"max":30,"step":2,"unit":"px","default":12,"isVisible":"property.cardShape == 'rectangle'"},{"type":"SELECT","id":"cardStyle","label":"카드 스타일","options":[{"value":"default","label":"기본 (그림자)"},{"value":"border","label":"테두리"},{"value":"flat","label":"플랫"},{"value":"elevated","label":"입체 (강한 그림자)"},{"value":"minimal","label":"미니멀"}],"default":"border"},{"type":"COLOR_PICKER","id":"cardBgColor","label":"카드 배경색","default":"#FAF8F5"},{"type":"COLOR_PICKER","id":"cardBorderColor","label":"↳ 테두리 색상","default":"#DDD5CC","isVisible":"property.cardStyle == 'border'"},{"type":"RANGE","id":"cardBorderWidth","label":"↳ 테두리 두께","min":1,"max":5,"step":1,"unit":"px","default":1,"isVisible":"property.cardStyle == 'border'"},{"type":"RANGE","id":"cardPadding","label":"카드 내부 여백","min":10,"max":50,"step":4,"unit":"px","default":10},{"type":"TITLE","content":"🎨 색상"},{"type":"COLOR_PICKER","id":"bgColor","label":"섹션 배경색","default":"#FAF8F5"},{"type":"COLOR_PICKER","id":"stepNumberColor","label":"단계 번호 색상","default":"#8C7B72"},{"type":"COLOR_PICKER","id":"cardTitleColor","label":"카드 제목 색상","default":"#3B2E2A"},{"type":"COLOR_PICKER","id":"cardDescColor","label":"카드 설명 색상","default":"#8C7B72"},{"type":"COLOR_PICKER","id":"iconColor","label":"아이콘 색상","default":"#3B2E2A"},{"type":"COLOR_PICKER","id":"iconBgColor","label":"아이콘 배경색","default":"#EDE3D8"},{"type":"RANGE","id":"iconSize","label":"아이콘 크기","min":24,"max":60,"step":4,"unit":"px","default":32},{"type":"TITLE","content":"🎬 애니메이션"},{"type":"CHECKBOX","id":"enableAnimation","label":"순차 애니메이션 활성화","default":true},{"type":"RANGE","id":"animationDelay","label":"↳ 딜레이","min":0,"max":300,"step":50,"unit":"ms","default":100,"isVisible":"property.enableAnimation == true"}],"property":{"sectionTitle":"<p style=\"text-align:center\">서비스 진행순서 안내</p>","titlePcSize":32,"titleMoSize":24,"headerBottomGap":40,"useMaxWidth":true,"maxWidth":1200,"desktopLayout":"nowrap","mobileLayout":"scroll","cardGap":20,"paddingTopDesktop":60,"paddingBottomDesktop":60,"paddingLeftDesktop":20,"paddingRightDesktop":20,"paddingTopMobile":40,"paddingBottomMobile":40,"paddingLeftMobile":16,"paddingRightMobile":16,"steps":[{"stepNumber":"STEP 01","title":"주문 확인","icon":"ph-clipboard-text","description":""},{"stepNumber":"STEP 02","title":"디자인 작업","icon":"ph-paint-brush","description":""},{"stepNumber":"STEP 03","title":"맞춤 제작","icon":"ph-wrench","description":""},{"stepNumber":"STEP 04","title":"가마 소성","icon":"ph-fire","description":""},{"stepNumber":"STEP 05","title":"선물 포장","icon":"ph-gift","description":""},{"stepNumber":"STEP 06","title":"발송","icon":"ph-truck","description":""}],"stepNumPcSize":11,"stepNumMoSize":10,"cardTitlePcSize":18,"cardTitleMoSize":15,"cardDescPcSize":13,"cardDescMoSize":12,"cardShape":"circle","circleSize":150,"cardBorderRadius":12,"cardStyle":"border","cardBgColor":"#FAF8F5","cardBorderColor":"#DDD5CC","cardBorderWidth":1,"cardPadding":10,"bgColor":"#F7F6F3FF","stepNumberColor":"#8C7B72FF","cardTitleColor":"#3B2E2AFF","cardDescColor":"#8C7B72FF","iconColor":"#3B2E2AFF","iconBgColor":"#EDE3D8FF","iconSize":32,"enableAnimation":true,"animationDelay":100}}
+
