@@ -1,0 +1,1509 @@
+<data value="$customer" />
+
+<style>
+.bm-form-wrapper {
+  width: 100%;
+  font-family: var(--font-family-body);
+  {{#if (or (eq property.layoutType 'split-image') (eq property.layoutType 'split-text'))}}
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 600px;
+  {{else}}
+  max-width: {{property.formMaxWidth}}px;
+  margin: 0 auto;
+  {{/if}}
+  background: {{property.formBgColor}};
+  overflow: hidden;
+  {{#if property.showShadow}}
+  box-shadow: 0 4px 16px rgba(59, 46, 42, 0.10);
+  {{/if}}
+}
+
+/* ===== 좌측 영역 ===== */
+.bm-form__left {
+  position: relative;
+  {{#if (eq property.layoutType 'split-image')}}
+  background-color: {{property.imageBgColor}};
+  {{#if property.leftImage}}
+  background-image: url('{{property.leftImage}}');
+  background-size: {{property.imagePosition}};
+  background-position: center;
+  background-repeat: no-repeat;
+  {{/if}}
+  {{/if}}
+  {{#if (eq property.layoutType 'split-text')}}
+  background-color: {{property.textBgColor}};
+  padding: {{property.containerPaddingTop}}px {{property.containerPaddingRight}}px {{property.containerPaddingBottom}}px {{property.containerPaddingLeft}}px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  {{/if}}
+  display: {{#if (eq property.layoutType 'full')}}none{{else}}block{{/if}};
+  {{#if (and (or (eq property.layoutType 'split-image') (eq property.layoutType 'split-text')) property.showDivider)}}
+  border-right: {{property.dividerWidth}}px solid {{property.dividerColor}};
+  {{/if}}
+}
+
+.bm-form__left-content {
+  max-width: 500px;
+  width: 100%;
+  {{#if (eq property.layoutType 'split-text')}}
+  margin: 0 auto;
+  {{/if}}
+}
+
+.bm-form__left-title h1,
+.bm-form__left-title h2,
+.bm-form__left-title h3,
+.bm-form__left-title h4,
+.bm-form__left-title h5,
+.bm-form__left-title h6 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  color: #1E1410;
+  margin-bottom: 16px;
+  margin-top: 0;
+  font-size: {{multiply property.titleFontSize 1.2}}px;
+}
+
+.bm-form__left-title p { margin: 0; }
+.bm-form__left-title strong { font-weight: 700; }
+.bm-form__left-title em, .bm-form__left-title i { font-style: italic; }
+
+.bm-form__left-desc {
+  color: #8C7B72;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.bm-form__left-desc p {
+  margin: 0 0 12px 0;
+  font-size: {{property.descriptionFontSize}}px;
+}
+
+/* ===== 연락처 리스트 ===== */
+.bm-form__contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+}
+
+.bm-form__contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.bm-form__contact-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  fill: {{property.primaryColor}};
+  margin-top: 2px;
+}
+
+.bm-form__contact-content { flex: 1; }
+
+.bm-form__contact-label {
+  font-weight: 600;
+  color: #3B2E2A;
+  font-size: {{property.contactFontSize}}px;
+  margin-bottom: 4px;
+}
+
+.bm-form__contact-value {
+  color: #8C7B72;
+  font-size: {{property.contactFontSize}}px;
+  line-height: 1.5;
+}
+
+.bm-form__contact-link {
+  color: #8C7B72;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.bm-form__contact-link:hover {
+  color: {{property.primaryColor}};
+  text-decoration: underline;
+}
+
+.bm-form__left-btn {
+  display: inline-block;
+  padding: 14px 40px;
+  background: {{property.primaryColor}};
+  color: #FAF8F5;
+  text-decoration: none;
+  border-radius: {{property.buttonBorderRadius}}px;
+  font-size: {{property.buttonFontSize}}px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.bm-form__left-btn:hover {
+  background: #2A1F1C;
+  box-shadow: 0 4px 16px rgba(59, 46, 42, 0.10);
+  transform: translateY(-1px);
+}
+
+/* ===== 폼 영역 ===== */
+.bm-form__section {
+  padding: {{property.containerPaddingTop}}px {{property.containerPaddingRight}}px {{property.containerPaddingBottom}}px {{property.containerPaddingLeft}}px;
+  background: {{property.formBgColor}};
+  overflow-y: auto;
+  position: relative;
+}
+
+.bm-form__header {
+  margin-bottom: calc({{property.fieldSpacing}}px * 1.5);
+}
+
+.bm-form__title h1,
+.bm-form__title h2,
+.bm-form__title h3,
+.bm-form__title h4,
+.bm-form__title h5,
+.bm-form__title h6 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  color: #1E1410;
+  margin-bottom: 12px;
+  margin-top: 0;
+  font-size: {{property.titleFontSize}}px;
+}
+
+.bm-form__title p { margin: 0; }
+.bm-form__title strong { font-weight: 700; }
+.bm-form__title em, .bm-form__title i { font-style: italic; }
+
+.bm-form__desc {
+  color: #8C7B72;
+  line-height: 1.6;
+}
+
+.bm-form__desc p {
+  margin: 0;
+  font-size: {{property.descriptionFontSize}}px;
+}
+
+/* ===== 로그인 배너 ===== */
+.bm-form__login-banner {
+  background: #FAF8F5;
+  border: 1px solid #E8E0D5;
+  padding: 12px 16px;
+  margin-bottom: {{property.fieldSpacing}}px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: {{property.fieldBorderRadius}}px;
+}
+
+.bm-form__login-text {
+  color: #8C7B72;
+}
+
+.bm-form__login-text p {
+  margin: 0;
+  font-size: {{property.bannerFontSize}}px;
+}
+
+.bm-form__login-link {
+  color: {{property.primaryColor}};
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.3s ease;
+  font-size: {{property.bannerFontSize}}px;
+}
+
+.bm-form__login-link:hover {
+  opacity: 0.8;
+}
+
+/* ===== 폼 그리드 ===== */
+.bm-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: {{property.fieldSpacing}}px;
+}
+
+.bm-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bm-form__field--full {
+  grid-column: 1 / -1;
+}
+
+.bm-form__label {
+  display: block;
+  font-weight: 500;
+  color: #3B2E2A;
+  font-size: {{property.labelFontSize}}px;
+}
+
+.bm-form__label--required::after {
+  content: " *";
+  color: #B85C5C;
+}
+
+/* ===== 입력 필드 공통 ===== */
+.bm-form__input,
+.bm-form__select,
+.bm-form__dropdown-trigger {
+  width: 100%;
+  padding: 10px 12px;
+  border: {{property.fieldBorderWidth}}px solid {{property.fieldBorderColor}};
+  border-radius: {{property.fieldBorderRadius}}px;
+  font-size: {{property.inputFontSize}}px;
+  font-family: var(--font-family-body);
+  background: {{property.fieldBgColor}};
+  color: #4A3F38;
+  transition: all 0.2s ease;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.bm-form__input:focus,
+.bm-form__select:focus,
+.bm-form__dropdown-trigger:focus {
+  border-color: {{property.fieldFocusBorderColor}};
+  box-shadow: 0 0 0 3px {{property.fieldFocusBorderColor}}20;
+}
+
+.bm-form__input::placeholder {
+  color: #8C7B72;
+}
+
+.bm-form__textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: {{property.fieldBorderWidth}}px solid {{property.fieldBorderColor}};
+  border-radius: {{property.fieldBorderRadius}}px;
+  font-size: {{property.inputFontSize}}px;
+  font-family: var(--font-family-body);
+  background: {{property.fieldBgColor}};
+  color: #4A3F38;
+  resize: vertical;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.bm-form__textarea:focus {
+  border-color: {{property.fieldFocusBorderColor}};
+  box-shadow: 0 0 0 3px {{property.fieldFocusBorderColor}}20;
+}
+
+.bm-form__textarea::placeholder {
+  color: #8C7B72;
+}
+
+.bm-form__textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.bm-form__counter {
+  text-align: right;
+  font-size: {{property.counterFontSize}}px;
+  color: #8C7B72;
+  margin-top: 4px;
+}
+
+/* ===== 드롭다운 ===== */
+.bm-form__dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.bm-form__dropdown-trigger {
+  cursor: pointer;
+  padding-right: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bm-form__dropdown-trigger--placeholder {
+  color: #8C7B72;
+}
+
+.bm-form__dropdown-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+  color: #8C7B72;
+}
+
+.bm-form__dropdown.open .bm-form__dropdown-icon {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.bm-form__dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: {{property.fieldBgColor}};
+  border: {{property.fieldBorderWidth}}px solid {{property.fieldBorderColor}};
+  border-radius: {{property.fieldBorderRadius}}px;
+  box-shadow: 0 4px 16px rgba(59, 46, 42, 0.10);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.bm-form__dropdown.open .bm-form__dropdown-menu {
+  display: block;
+}
+
+.bm-form__dropdown-option {
+  padding: 10px 12px;
+  font-size: {{property.inputFontSize}}px;
+  font-family: var(--font-family-body);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4A3F38;
+}
+
+.bm-form__dropdown-option:hover {
+  background-color: #EDE3D8;
+}
+
+.bm-form__dropdown-option--selected {
+  background-color: #EDE3D8;
+}
+
+.bm-form__dropdown-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid {{property.fieldBorderColor}};
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.bm-form__dropdown-option--selected .bm-form__dropdown-checkbox {
+  background-color: {{property.primaryColor}};
+  border-color: {{property.primaryColor}};
+}
+
+.bm-form__dropdown-option--selected .bm-form__dropdown-checkbox::after {
+  content: "✓";
+  color: #FAF8F5;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* ===== 파일 업로드 ===== */
+.bm-form__file-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.bm-form__file-area {
+  position: relative;
+  padding: 20px;
+  border: 2px dashed {{property.fieldBorderColor}};
+  border-radius: {{property.fieldBorderRadius}}px;
+  background: {{property.fieldBgColor}};
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bm-form__file-area:hover {
+  border-color: {{property.fieldFocusBorderColor}};
+  background: #EDE3D8;
+}
+
+.bm-form__file-area--dragover {
+  border-color: {{property.fieldFocusBorderColor}};
+  background: #EDE3D8;
+}
+
+.bm-form__file-input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.bm-form__file-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  fill: #8C7B72;
+}
+
+.bm-form__file-text {
+  font-size: {{property.inputFontSize}}px;
+  color: #4A3F38;
+  margin-bottom: 8px;
+}
+
+.bm-form__file-hint {
+  font-size: {{property.counterFontSize}}px;
+  color: #8C7B72;
+}
+
+.bm-form__file-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bm-form__file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #FAF8F5;
+  border: 1px solid #E8E0D5;
+  border-radius: {{property.fieldBorderRadius}}px;
+  font-size: {{property.inputFontSize}}px;
+}
+
+.bm-form__file-item-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bm-form__file-item-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #4A3F38;
+}
+
+.bm-form__file-item-size {
+  color: #8C7B72;
+  font-size: {{property.counterFontSize}}px;
+  flex-shrink: 0;
+}
+
+.bm-form__file-item-remove {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: #B85C5C;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.bm-form__file-item-remove:hover {
+  opacity: 0.7;
+}
+
+/* ===== 개인정보 동의 ===== */
+.bm-form__privacy {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: {{property.fieldSpacing}}px;
+  grid-column: 1 / -1;
+}
+
+.bm-form__checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 2px solid {{property.fieldBorderColor}};
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.bm-form__checkbox-custom--checked {
+  background-color: {{property.primaryColor}};
+  border-color: {{property.primaryColor}};
+}
+
+.bm-form__checkbox-custom--checked::after {
+  content: "✓";
+  color: #FAF8F5;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.bm-form__privacy-label {
+  font-size: {{property.privacyFontSize}}px;
+  cursor: pointer;
+  color: #4A3F38;
+  line-height: 1.5;
+}
+
+.bm-form__privacy-label strong, .bm-form__privacy-label b { font-weight: bold; }
+.bm-form__privacy-label em, .bm-form__privacy-label i { font-style: italic; }
+
+.bm-form__privacy-more {
+  color: {{property.primaryColor}};
+  text-decoration: none;
+  margin-left: 8px;
+  font-size: {{property.privacyFontSize}}px;
+  transition: opacity 0.2s ease;
+}
+
+.bm-form__privacy-more:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.bm-form__terms-box {
+  margin-top: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid {{property.fieldBorderColor}};
+  border-radius: {{property.fieldBorderRadius}}px;
+  padding: 12px;
+  background: {{property.fieldBgColor}};
+  font-size: {{subtract property.privacyFontSize 1}}px;
+  color: #4A3F38;
+  line-height: 1.4;
+  display: none;
+}
+
+.bm-form__terms-box--show {
+  display: block;
+}
+
+.bm-form__terms-box p {
+  margin: 0 0 8px 0;
+}
+
+.bm-form__terms-box p:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== 제출 버튼 ===== */
+.bm-form__submit {
+  width: 100%;
+  padding: 14px 40px;
+  border-radius: {{property.buttonBorderRadius}}px;
+  font-size: {{property.buttonFontSize}}px;
+  font-weight: 500;
+  font-family: var(--font-family-body);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: calc({{property.fieldSpacing}}px * 1.5);
+  grid-column: 1 / -1;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  
+  {{#if (eq property.buttonStyle 'filled')}}
+  background: {{property.buttonBgColor}};
+  color: {{property.buttonTextColor}};
+  {{#if property.buttonFilledBorder}}
+  border: {{property.buttonFilledBorderWidth}}px solid {{property.buttonFilledBorderColor}};
+  {{else}}
+  border: none;
+  {{/if}}
+  {{/if}}
+  
+  {{#if (eq property.buttonStyle 'outline')}}
+  background: transparent;
+  color: {{property.buttonOutlineTextColor}};
+  border: {{property.buttonOutlineBorderWidth}}px solid {{property.buttonOutlineColor}};
+  {{/if}}
+}
+
+.bm-form__submit strong, .bm-form__submit b { font-weight: bold; }
+.bm-form__submit em, .bm-form__submit i { font-style: italic; }
+
+.bm-form__submit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  transition: left 0.3s ease;
+  z-index: -1;
+  
+  {{#if (eq property.buttonStyle 'filled')}}
+  background: {{property.buttonHoverBgColor}};
+  {{/if}}
+  
+  {{#if (eq property.buttonStyle 'outline')}}
+  background: {{property.buttonOutlineHoverBg}};
+  {{/if}}
+}
+
+.bm-form__submit:hover:not(:disabled)::before {
+  left: 0;
+}
+
+.bm-form__submit:hover:not(:disabled) {
+  {{#if (eq property.buttonStyle 'filled')}}
+  color: {{property.buttonHoverTextColor}};
+  {{#if property.buttonFilledBorder}}
+  border-color: {{property.buttonFilledHoverBorderColor}};
+  {{/if}}
+  {{/if}}
+  
+  {{#if (eq property.buttonStyle 'outline')}}
+  color: {{property.buttonOutlineHoverText}};
+  border-color: {{property.buttonOutlineHoverBorderColor}};
+  {{/if}}
+}
+
+.bm-form__submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ===== 알림 ===== */
+.bm-form__alert {
+  padding: 12px 16px;
+  border-radius: {{property.fieldBorderRadius}}px;
+  margin-bottom: {{property.fieldSpacing}}px;
+  font-size: {{property.alertFontSize}}px;
+}
+
+.bm-form__alert--warning {
+  background: #FDF3E6;
+  border: 1px solid #C4924A;
+  color: #C4924A;
+}
+
+.bm-form__alert--success {
+  background: #EBF3EC;
+  border: 1px solid #6B8F71;
+  color: #6B8F71;
+  display: none;
+}
+
+.bm-form__alert--success.show {
+  display: block;
+}
+
+/* ===== 반응형 ===== */
+@media (max-width: 768px) {
+  .bm-form-wrapper {
+    {{#if (or (eq property.layoutType 'split-image') (eq property.layoutType 'split-text'))}}
+    grid-template-columns: 1fr;
+    {{else}}
+    max-width: 100%;
+    {{/if}}
+  }
+  
+  .bm-form__left {
+    {{#if property.showImageOnMobile}}
+    {{#if (eq property.layoutType 'split-image')}}
+    min-height: {{property.mobileImageHeight}}px;
+    {{/if}}
+    {{#if (eq property.layoutType 'split-text')}}
+    min-height: auto;
+    padding: {{multiply property.containerPaddingTop 0.75}}px {{multiply property.containerPaddingRight 0.75}}px {{multiply property.containerPaddingBottom 0.75}}px {{multiply property.containerPaddingLeft 0.75}}px;
+    {{/if}}
+    {{#if (and (or (eq property.layoutType 'split-image') (eq property.layoutType 'split-text')) property.showDivider)}}
+    border-right: none;
+    border-bottom: {{property.dividerWidth}}px solid {{property.dividerColor}};
+    {{/if}}
+    {{else}}
+    display: none !important;
+    {{/if}}
+  }
+  
+  .bm-form__section {
+    padding: {{multiply property.containerPaddingTop 0.75}}px {{multiply property.containerPaddingRight 0.75}}px {{multiply property.containerPaddingBottom 0.75}}px {{multiply property.containerPaddingLeft 0.75}}px;
+  }
+  
+  .bm-form__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bm-form__field {
+    grid-column: 1 / -1 !important;
+  }
+  
+  .bm-form__title h1, .bm-form__title h2, .bm-form__title h3,
+  .bm-form__title h4, .bm-form__title h5, .bm-form__title h6 {
+    font-size: {{multiply property.titleFontSize 0.85}}px;
+  }
+}
+</style>
+
+<template>
+  <div class="bm-form-wrapper">
+    {{#if (or (eq property.layoutType 'split-image') (eq property.layoutType 'split-text'))}}
+    <div class="bm-form__left">
+      {{#if (eq property.layoutType 'split-text')}}
+      <div class="bm-form__left-content">
+        <div class="bm-form__left-title">{{{property.leftTitle}}}</div>
+        <div class="bm-form__left-desc">{{{property.leftDescription}}}</div>
+        
+        {{#if property.contactItems}}
+        <ul class="bm-form__contact-list">
+          {{#each property.contactItems}}
+          <li class="bm-form__contact-item">
+            {{#if (eq icon 'location')}}
+            <svg class="bm-form__contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/>
+            </svg>
+            {{/if}}
+            {{#if (eq icon 'phone')}}
+            <svg class="bm-form__contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/>
+            </svg>
+            {{/if}}
+            {{#if (eq icon 'email')}}
+            <svg class="bm-form__contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"/>
+            </svg>
+            {{/if}}
+            {{#if (eq icon 'clock')}}
+            <svg class="bm-form__contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/>
+            </svg>
+            {{/if}}
+            {{#if (eq icon 'website')}}
+            <svg class="bm-form__contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM101.63,168h52.74C149,186.34,140,202.87,128,215.89,116,202.87,107,186.34,101.63,168ZM98,152a145.72,145.72,0,0,1,0-48h60a145.72,145.72,0,0,1,0,48ZM40,128a88,88,0,0,1,1.7-17H76.29a161.79,161.79,0,0,0,0,34H41.7A88,88,0,0,1,40,128Zm115.89-40H100.11C105.51,69.66,114.49,53.13,126.49,40.11,138.49,53.13,147.51,69.66,152.89,88Zm23.82,23h34.59a88,88,0,0,1,0,34H179.71a161.79,161.79,0,0,0,0-34Zm22.4-16H169.82a142.94,142.94,0,0,0-20.26-59.57A88.37,88.37,0,0,1,202.11,95ZM106.44,35.43A142.94,142.94,0,0,0,86.18,95H53.89A88.37,88.37,0,0,1,106.44,35.43ZM53.89,161H86.18a142.94,142.94,0,0,0,20.26,59.57A88.37,88.37,0,0,1,53.89,161Zm95.67,59.57A142.94,142.94,0,0,0,169.82,161h32.29A88.37,88.37,0,0,1,149.56,220.57Z"/>
+            </svg>
+            {{/if}}
+            {{#if (ne icon 'none')}}
+            <div class="bm-form__contact-content">
+              <div class="bm-form__contact-label">{{label}}</div>
+              {{#if isLink}}
+              <a href="{{linkUrl}}" class="bm-form__contact-value bm-form__contact-link">{{value}}</a>
+              {{else}}
+              <div class="bm-form__contact-value">{{value}}</div>
+              {{/if}}
+            </div>
+            {{else}}
+            <div class="bm-form__contact-content">
+              {{#if isLink}}
+              <a href="{{linkUrl}}" class="bm-form__contact-value bm-form__contact-link">{{value}}</a>
+              {{else}}
+              <div class="bm-form__contact-value">{{value}}</div>
+              {{/if}}
+            </div>
+            {{/if}}
+          </li>
+          {{/each}}
+        </ul>
+        {{/if}}
+        
+        {{#if property.showLeftButton}}
+        <a href="{{property.leftButtonLink.value}}" class="bm-form__left-btn" {{#if property.leftButtonNewTab}}target="_blank"{{/if}}>
+          {{{property.leftButtonText}}}
+        </a>
+        {{/if}}
+      </div>
+      {{/if}}
+    </div>
+    {{/if}}
+    
+    <div class="bm-form__section">
+      <div class="bm-form__header">
+        {{#if property.showFormTitle}}
+        <div class="bm-form__title">{{{property.formTitle}}}</div>
+        {{/if}}
+        {{#if property.showFormDescription}}
+        <div class="bm-form__desc">{{{property.formDescription}}}</div>
+        {{/if}}
+      </div>
+      
+      <div id="submit-range"></div>
+      <div id="submit-complete" class="bm-form__alert bm-form__alert--success">제출이 완료되었습니다.</div>
+      
+      {{#if (and property.showLoginBanner (isNil customer))}}
+      <div class="bm-form__login-banner">
+        <div class="bm-form__login-text">{{{property.loginBannerText}}}</div>
+        <a href="/auth/login" class="bm-form__login-link">
+          로그인
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+          </svg>
+        </a>
+      </div>
+      {{/if}}
+      
+      <form class="bm-form__form" data-form-container>
+        <div class="bm-form__grid">
+          {{#each property.fields}}
+          <div class="bm-form__field {{#if (or (eq fieldSpan 'full') (eq type 'textarea') (eq type 'file'))}}bm-form__field--full{{/if}}">
+            <label class="bm-form__label {{#if isRequired}}bm-form__label--required{{/if}}">{{name}}</label>
+            
+            {{#if (eq type 'text')}}
+            <input type="text" name="field_{{@index}}" class="bm-form__input" placeholder="{{placeholder}}" {{#if isRequired}}data-required="true"{{/if}}>
+            {{/if}}
+            
+            {{#if (eq type 'email')}}
+            <input type="email" name="field_{{@index}}" class="bm-form__input" placeholder="{{placeholder}}" {{#if isRequired}}data-required="true"{{/if}}>
+            {{/if}}
+            
+            {{#if (eq type 'phone')}}
+            <input type="tel" name="field_{{@index}}" class="bm-form__input" placeholder="{{placeholder}}" {{#if isRequired}}data-required="true"{{/if}}>
+            {{/if}}
+            
+            {{#if (eq type 'number')}}
+            <input type="number" name="field_{{@index}}" class="bm-form__input" placeholder="{{placeholder}}" {{#if isRequired}}data-required="true"{{/if}}>
+            {{/if}}
+            
+            {{#if (eq type 'date')}}
+            <input type="date" name="field_{{@index}}" class="bm-form__input" {{#if isRequired}}data-required="true"{{/if}}>
+            {{/if}}
+            
+            {{#if (eq type 'textarea')}}
+            <div class="bm-form__textarea-wrapper">
+              <textarea name="field_{{@index}}" class="bm-form__textarea" placeholder="{{placeholder}}" maxlength="5000" {{#if isRequired}}data-required="true"{{/if}}></textarea>
+              <div class="bm-form__counter">
+                <span class="char-count">0</span>/5,000
+              </div>
+            </div>
+            {{/if}}
+            
+            {{#if (eq type 'dropdown-single')}}
+            <div class="bm-form__dropdown" data-dropdown="single" data-field-index="{{@index}}">
+              <input type="hidden" name="field_{{@index}}" {{#if isRequired}}data-required="true"{{/if}}>
+              <div class="bm-form__dropdown-trigger bm-form__dropdown-trigger--placeholder">{{placeholder}}</div>
+              <svg class="bm-form__dropdown-icon" viewBox="0 0 10 10" fill="currentColor">
+                <path d="M2 3L5 6L8 3"/>
+              </svg>
+              <div class="bm-form__dropdown-menu">
+                {{#each (split selectOptions ",")}}
+                <div class="bm-form__dropdown-option" data-value="{{trim this}}">
+                  <span>{{trim this}}</span>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+            {{/if}}
+            
+            {{#if (eq type 'dropdown-multi')}}
+            <div class="bm-form__dropdown" data-dropdown="multi" data-field-index="{{@index}}">
+              <input type="hidden" name="field_{{@index}}" {{#if isRequired}}data-required="true"{{/if}}>
+              <div class="bm-form__dropdown-trigger bm-form__dropdown-trigger--placeholder">{{placeholder}}</div>
+              <svg class="bm-form__dropdown-icon" viewBox="0 0 10 10" fill="currentColor">
+                <path d="M2 3L5 6L8 3"/>
+              </svg>
+              <div class="bm-form__dropdown-menu">
+                {{#each (split selectOptions ",")}}
+                <div class="bm-form__dropdown-option" data-value="{{trim this}}">
+                  <div class="bm-form__dropdown-checkbox"></div>
+                  <span>{{trim this}}</span>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+            {{/if}}
+            
+            {{#if (eq type 'file')}}
+            <div class="bm-form__file-wrapper" data-field-index="{{@index}}" data-max-size="{{maxFileSize}}">
+              <input type="hidden" name="field_{{@index}}_files" {{#if isRequired}}data-required="true"{{/if}}>
+              <div class="bm-form__file-area">
+                <input type="file" class="bm-form__file-input" accept="{{acceptedFormats}}" {{#if allowMultiple}}multiple{{/if}}>
+                <svg class="bm-form__file-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 256 256">
+                  <path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0ZM93.66,77.66,120,51.31V144a8,8,0,0,0,16,0V51.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40A8,8,0,0,0,93.66,77.66Z"/>
+                </svg>
+                <div class="bm-form__file-text">파일을 선택하거나 여기에 끌어다 놓으세요</div>
+                <div class="bm-form__file-hint">최대 {{maxFileSize}}MB, {{acceptedFormats}}</div>
+              </div>
+              <div class="bm-form__file-list"></div>
+            </div>
+            {{/if}}
+          </div>
+          {{/each}}
+          
+          {{#if (and property.board.id property.showPrivacyConsent)}}
+          <div class="bm-form__privacy">
+            <input type="checkbox" id="privacy" name="field_privacy" style="display: none;" data-required="true">
+            <div class="bm-form__checkbox-custom" data-privacy-checkbox></div>
+            <div style="flex: 1;">
+              <label for="privacy" class="bm-form__privacy-label">
+                {{{property.privacyText}}} <span style="color: #B85C5C;">(필수)</span>
+                {{#if (eq property.privacyDisplayType 'link')}}
+                <a href="{{property.privacyLinkUrl}}" class="bm-form__privacy-more" {{#if property.privacyLinkNewTab}}target="_blank"{{/if}}>더보기</a>
+                {{/if}}
+                {{#if (eq property.privacyDisplayType 'scrollbox')}}
+                <a href="#" class="bm-form__privacy-more" data-toggle-terms>더보기</a>
+                {{/if}}
+              </label>
+              {{#if (eq property.privacyDisplayType 'scrollbox')}}
+              <div class="bm-form__terms-box" data-terms-box>
+                {{{property.privacyTermsContent}}}
+              </div>
+              {{/if}}
+            </div>
+          </div>
+          {{/if}}
+          
+          <button type="submit" class="bm-form__submit" id="btn-submit">{{{property.submitButtonText}}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<script>
+const container = bm.container;
+const context = bm.context;
+
+const fileManager = {
+  files: {},
+  
+  addFiles(fieldIndex, newFiles) {
+    if (!this.files[fieldIndex]) {
+      this.files[fieldIndex] = [];
+    }
+    this.files[fieldIndex].push(...newFiles);
+  },
+  
+  removeFile(fieldIndex, fileName) {
+    if (this.files[fieldIndex]) {
+      this.files[fieldIndex] = this.files[fieldIndex].filter(f => f.name !== fileName);
+    }
+  },
+  
+  getFiles(fieldIndex) {
+    return this.files[fieldIndex] || [];
+  },
+  
+  clearAll() {
+    this.files = {};
+  }
+};
+
+class Dropdown {
+  constructor(element) {
+    this.wrapper = element;
+    this.trigger = element.querySelector('.dropdown-trigger');
+    this.menu = element.querySelector('.dropdown-menu');
+    this.options = element.querySelectorAll('.dropdown-option');
+    this.hiddenInput = element.querySelector('input[type="hidden"]');
+    this.fieldIndex = element.dataset.fieldIndex;
+    this.type = element.dataset.dropdown;
+    this.selectedValues = [];
+    
+    this.init();
+  }
+  
+  init() {
+    this.trigger.addEventListener('click', () => this.toggle());
+    
+    if (this.type === 'single') {
+      this.options.forEach(option => {
+        option.addEventListener('click', (e) => this.selectSingle(e));
+      });
+    } else {
+      this.options.forEach(option => {
+        option.addEventListener('click', (e) => this.selectMulti(e));
+      });
+    }
+    
+    document.addEventListener('click', (e) => {
+      if (!this.wrapper.contains(e.target)) {
+        this.close();
+      }
+    });
+  }
+  
+  toggle() {
+    if (this.wrapper.classList.contains('open')) {
+      this.close();
+    } else {
+      this.open();
+    }
+  }
+  
+  open() {
+    this.wrapper.classList.add('open');
+  }
+  
+  close() {
+    this.wrapper.classList.remove('open');
+  }
+  
+  selectSingle(e) {
+    e.stopPropagation();
+    const option = e.currentTarget;
+    const value = option.dataset.value;
+    
+    this.options.forEach(opt => opt.classList.remove('selected'));
+    option.classList.add('selected');
+    
+    this.trigger.textContent = value;
+    this.trigger.classList.remove('placeholder');
+    this.hiddenInput.value = value;
+    this.selectedValues = [value];
+    
+    this.close();
+  }
+  
+  selectMulti(e) {
+    e.stopPropagation();
+    const option = e.currentTarget;
+    const value = option.dataset.value;
+    
+    if (option.classList.contains('selected')) {
+      option.classList.remove('selected');
+      this.selectedValues = this.selectedValues.filter(v => v !== value);
+    } else {
+      option.classList.add('selected');
+      this.selectedValues.push(value);
+    }
+    
+    if (this.selectedValues.length > 0) {
+      this.trigger.textContent = this.selectedValues.join(', ');
+      this.trigger.classList.remove('placeholder');
+      this.hiddenInput.value = this.selectedValues.join(', ');
+    } else {
+      const field = context.property.fields[this.fieldIndex];
+      this.trigger.textContent = field.placeholder || '선택하세요';
+      this.trigger.classList.add('placeholder');
+      this.hiddenInput.value = '';
+    }
+  }
+}
+
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function initFileUploads() {
+  const fileWrappers = container.querySelectorAll('.file-upload-wrapper');
+  
+  fileWrappers.forEach(wrapper => {
+    const fieldIndex = parseInt(wrapper.dataset.fieldIndex);
+    const field = context.property.fields[fieldIndex];
+    if (!field) return;
+    
+    const input = wrapper.querySelector('.file-upload-input');
+    const area = wrapper.querySelector('.file-upload-area');
+    const fileList = wrapper.querySelector('.file-list');
+    const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+    
+    const maxSizeMB = parseFloat(wrapper.dataset.maxSize) || field.maxFileSize || 10;
+    const maxSize = maxSizeMB * 1024 * 1024;
+    
+    input.addEventListener('change', async (e) => {
+      await handleFiles(e.target.files, fieldIndex, field, maxSize, maxSizeMB, fileList, hiddenInput);
+    });
+    
+    area.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      area.classList.add('dragover');
+    });
+    
+    area.addEventListener('dragleave', () => {
+      area.classList.remove('dragover');
+    });
+    
+    area.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      area.classList.remove('dragover');
+      await handleFiles(e.dataTransfer.files, fieldIndex, field, maxSize, maxSizeMB, fileList, hiddenInput);
+    });
+  });
+}
+
+async function handleFiles(files, fieldIndex, field, maxSize, maxSizeMB, fileListElement, hiddenInput) {
+  const acceptedFormats = field.acceptedFormats ? field.acceptedFormats.split(',').map(f => f.trim().toLowerCase()) : [];
+  const validFiles = [];
+  
+  for (const file of files) {
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    
+    if (acceptedFormats.length > 0 && !acceptedFormats.includes(fileExtension)) {
+      alert(`${file.name}: 허용되지 않은 파일 형식입니다. (허용: ${field.acceptedFormats})`);
+      continue;
+    }
+    
+    if (file.size > maxSize) {
+      alert(`${file.name}: 파일 크기가 ${maxSizeMB}MB를 초과합니다.`);
+      continue;
+    }
+    
+    if (!field.allowMultiple && fileManager.getFiles(fieldIndex).length > 0) {
+      alert('하나의 파일만 첨부 가능합니다.');
+      break;
+    }
+    
+    validFiles.push(file);
+  }
+  
+  if (validFiles.length > 0) {
+    if (!field.allowMultiple) {
+      fileManager.files[fieldIndex] = [];
+    }
+    fileManager.addFiles(fieldIndex, validFiles);
+    updateFileList(fieldIndex, fileListElement, hiddenInput);
+  }
+}
+
+function updateFileList(fieldIndex, fileListElement, hiddenInput) {
+  const files = fileManager.getFiles(fieldIndex);
+  fileListElement.innerHTML = '';
+  
+  if (files.length > 0) {
+    hiddenInput.value = 'files_attached';
+    
+    files.forEach(file => {
+      const fileItem = document.createElement('div');
+      fileItem.className = 'file-item';
+      fileItem.innerHTML = `
+        <div class="file-item-info">
+          <span class="file-item-name">${file.name}</span>
+          <span class="file-item-size">${formatFileSize(file.size)}</span>
+        </div>
+        <button type="button" class="file-item-remove" data-file-name="${file.name}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+          </svg>
+        </button>
+      `;
+      
+      const removeBtn = fileItem.querySelector('.file-item-remove');
+      removeBtn.addEventListener('click', () => {
+        fileManager.removeFile(fieldIndex, file.name);
+        updateFileList(fieldIndex, fileListElement, hiddenInput);
+      });
+      
+      fileListElement.appendChild(fileItem);
+    });
+  } else {
+    hiddenInput.value = '';
+  }
+}
+
+function initForm() {
+  const form = container.querySelector('[data-form-container]');
+  const submitBtn = container.querySelector('#btn-submit');
+  const privacyCheckbox = container.querySelector('#privacy');
+  const checkboxCustom = container.querySelector('[data-privacy-checkbox]');
+  
+  initFileUploads();
+  
+  const dropdowns = [];
+  container.querySelectorAll('.dropdown-wrapper').forEach(el => {
+    dropdowns.push(new Dropdown(el));
+  });
+  
+  // 개인정보 동의 체크박스 처리
+  if (checkboxCustom && privacyCheckbox) {
+    checkboxCustom.addEventListener('click', () => {
+      privacyCheckbox.checked = !privacyCheckbox.checked;
+      checkboxCustom.classList.toggle('checked', privacyCheckbox.checked);
+    });
+  }
+  
+  // 약관 더보기 토글 처리
+  const toggleTermsLink = container.querySelector('[data-toggle-terms]');
+  const termsBox = container.querySelector('[data-terms-box]');
+  
+  if (toggleTermsLink && termsBox) {
+    toggleTermsLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      termsBox.classList.toggle('show');
+      toggleTermsLink.textContent = termsBox.classList.contains('show') ? '접기' : '더보기';
+    });
+  }
+  
+  const textareas = container.querySelectorAll('.field-textarea');
+  textareas.forEach(textarea => {
+    const counter = textarea.parentElement.querySelector('.char-count');
+    if (counter) {
+      textarea.addEventListener('input', () => {
+        counter.textContent = textarea.value.length;
+      });
+    }
+  });
+  
+  if (context.property.useSubmitRange && context.property.submitStart && context.property.submitEnd) {
+    const start = new Date(context.property.submitStart);
+    const end = new Date(context.property.submitEnd);
+    const today = new Date();
+    const submitRangeDiv = container.querySelector('#submit-range');
+    
+    if (today < start || today > end) {
+      if (submitRangeDiv) {
+        submitRangeDiv.innerHTML = `
+          <div class="alert alert-warning">
+            제출기한이 아닙니다. ${start.toLocaleDateString()} ~ ${end.toLocaleDateString()}까지만 제출이 가능합니다.
+          </div>
+        `;
+      }
+      submitBtn.disabled = true;
+    }
+  }
+  
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!context.property.board || !context.property.board.id) {
+      alert('게시판을 설정해주세요');
+      return;
+    }
+    
+    const formData = new FormData(form);
+    const fieldData = [];
+    let userName = '고객';
+    let userEmail = 'customer@sixshop.com';
+    
+    let isValid = true;
+    
+    for (let i = 0; i < context.property.fields.length; i++) {
+      const field = context.property.fields[i];
+      const fieldName = `field_${i}`;
+      
+      if (field.type === 'file') {
+        const files = fileManager.getFiles(i);
+        
+        if (field.isRequired && files.length === 0) {
+          alert(`${field.name}을(를) 첨부해주세요`);
+          isValid = false;
+          break;
+        }
+        
+        if (files.length > 0) {
+          const fileInfos = [];
+          for (const file of files) {
+            const base64 = await fileToBase64(file);
+            fileInfos.push({
+              name: file.name,
+              size: formatFileSize(file.size),
+              data: base64
+            });
+          }
+          
+          fieldData.push({
+            name: field.name,
+            value: `첨부파일 ${files.length}개`,
+            files: fileInfos
+          });
+        }
+      } else {
+        const value = formData.get(fieldName) || '';
+        
+        if (!context.customer) {
+          if (field.type === 'text' && (field.name.includes('이름') || field.name.toLowerCase().includes('name'))) {
+            if (value) userName = value;
+          }
+          if (field.type === 'email' && value) {
+            userEmail = value;
+          }
+        }
+        
+        if (field.isRequired && !value) {
+          alert(`${field.name}을(를) 입력해주세요`);
+          isValid = false;
+          break;
+        }
+        
+        if (field.type === 'email' && value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            alert(`올바른 이메일 형식을 입력해주세요`);
+            isValid = false;
+            break;
+          }
+        }
+        
+        if (field.type === 'phone' && value) {
+          const phoneRegex = /^[0-9-+() ]+$/;
+          if (!phoneRegex.test(value)) {
+            alert(`올바른 전화번호 형식을 입력해주세요`);
+            isValid = false;
+            break;
+          }
+        }
+        
+        fieldData.push({
+          name: field.name,
+          value: value
+        });
+      }
+    }
+    
+    if (!isValid) return;
+    
+    if (context.property.board.id && context.property.showPrivacyConsent && privacyCheckbox && !privacyCheckbox.checked) {
+      alert('개인정보 수집 및 이용에 동의해주세요');
+      return;
+    }
+    
+    try {
+      submitBtn.disabled = true;
+      submitBtn.textContent = '제출 중...';
+      
+      const title = context.customer 
+        ? `${context.customer.name.full}님의 응답`
+        : `${userName}님의 응답`;
+      
+      const contentsContainer = document.createElement('ul');
+      contentsContainer.style.listStyle = 'none';
+      contentsContainer.style.padding = '0';
+      
+      fieldData.forEach(field => {
+        const listItem = document.createElement('li');
+        listItem.style.marginBottom = '10px';
+        
+        if (field.files) {
+          let fileHtml = `<strong>${field.name}:</strong><br>`;
+          field.files.forEach(file => {
+            fileHtml += `<div style="margin-left: 20px; margin-top: 5px;">
+              <a href="${file.data}" download="${file.name}" style="color: #1A4AE7;">
+                📎 ${file.name} (${file.size})
+              </a>
+            </div>`;
+          });
+          listItem.innerHTML = fileHtml;
+        } else {
+          const formattedValue = field.value.toString().replace(/\n/g, '<br>');
+          listItem.innerHTML = `<strong>${field.name}:</strong> ${formattedValue}`;
+        }
+        
+        contentsContainer.appendChild(listItem);
+      });
+      
+      const contents = contentsContainer.outerHTML;
+      
+      const params = {
+        boardId: context.property.board.id,
+        title,
+        contents,
+        accessType: 'OPEN'
+      };
+      
+      if (!context.customer) {
+        params.userName = userName;
+        params.email = userEmail;
+        params.password = 'sixshopisawesome';
+      }
+      
+      const result = await bm.do('board:createPost', { params });
+      
+      if (result) {
+        form.reset();
+        fileManager.clearAll();
+        
+        container.querySelectorAll('.file-list').forEach(el => {
+          el.innerHTML = '';
+        });
+        
+        if (checkboxCustom) {
+          checkboxCustom.classList.remove('checked');
+        }
+        if (privacyCheckbox) {
+          privacyCheckbox.checked = false;
+        }
+        
+        if (termsBox) {
+          termsBox.classList.remove('show');
+        }
+        if (toggleTermsLink) {
+          toggleTermsLink.textContent = '더보기';
+        }
+        
+        container.querySelectorAll('.dropdown-trigger').forEach((trigger) => {
+          const wrapper = trigger.closest('.dropdown-wrapper');
+          const fieldIndex = wrapper.dataset.fieldIndex;
+          const field = context.property.fields[fieldIndex];
+          if (field) {
+            trigger.textContent = field.placeholder || '선택하세요';
+            trigger.classList.add('placeholder');
+          }
+        });
+        
+        container.querySelectorAll('.dropdown-option').forEach(opt => {
+          opt.classList.remove('selected');
+        });
+        
+        container.querySelectorAll('input[type="hidden"]').forEach(input => {
+          input.value = '';
+        });
+        
+        const counters = container.querySelectorAll('.char-count');
+        counters.forEach(counter => {
+          counter.textContent = '0';
+        });
+        
+        const completeAlert = container.querySelector('#submit-complete');
+        if (completeAlert) {
+          completeAlert.classList.add('show');
+          setTimeout(() => {
+            completeAlert.classList.remove('show');
+          }, 5000);
+        }
+        
+        alert('제출이 완료되었습니다.');
+      } else {
+        alert('제출에 실패했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      alert('제출 중 오류가 발생했습니다.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = context.property.submitButtonText;
+    }
+  });
+}
+
+initForm();
+
+bm.onContextChange = () => {
+  fileManager.clearAll();
+  initForm();
+};
+
+bm.onDestroy = () => {
+  fileManager.clearAll();
+  const form = container.querySelector('[data-form-container]');
+  if (form) {
+    form.replaceWith(form.cloneNode(true));
+  }
+};
+</script>
+
+{"settings":[{"type":"TITLE","content":"누끼토끼 전문 개발 블록"},{"type":"DESCRIPTION","content":"【 안내 】\n코드 없이 직접 운영하실 수 있도록\n전문 개발자가 기획·설계·구현했습니다.\n간단한 수정은 블록 AI를 활용하시고,\n고도화된 커스텀이 필요하시면\n전문가에게 의뢰해 주세요."},{"type":"TITLE","content":"📋 응답 저장 설정"},{"type":"BOARD","id":"board","label":"응답 관리 게시판","description":"선택한 게시판에 폼을 통해 수집된 고객 응답이 자동으로 저장됩니다.","isPostsIncluded":false},{"type":"CHECKBOX","id":"useSubmitRange","label":"제출기한 설정","default":false},{"type":"TEXT","id":"submitStart","label":"제출기한 (시작일)","placeholder":"YYYY-MM-DD","isVisible":"property.useSubmitRange == true"},{"type":"TEXT","id":"submitEnd","label":"제출기한 (마감일)","placeholder":"YYYY-MM-DD","isVisible":"property.useSubmitRange == true"},{"type":"TITLE","content":"📐 레이아웃 설정"},{"type":"SELECT","id":"layoutType","label":"레이아웃 타입","options":[{"value":"split-image","label":"분할형 (이미지 + 폼)"},{"value":"split-text","label":"분할형 (텍스트 + 폼)"},{"value":"full","label":"전체 너비 (폼만)"}],"default":"split-image"},{"type":"TITLE","content":"✏️ 입력 항목 설정"},{"type":"LIST","id":"fields","label":"입력 항목 목록","maxCount":20,"settings":[{"type":"SELECT","id":"type","label":"유형","options":[{"value":"text","label":"단답형"},{"value":"textarea","label":"장답형"},{"value":"dropdown-single","label":"드롭다운 - 단일 선택"},{"value":"dropdown-multi","label":"드롭다운 - 복수 선택"},{"value":"email","label":"이메일"},{"value":"phone","label":"전화번호"},{"value":"number","label":"숫자"},{"value":"date","label":"날짜"},{"value":"file","label":"파일 첨부"}],"default":"text"},{"type":"RADIO","id":"fieldSpan","label":"너비","options":[{"value":"full","label":"전체"},{"value":"half","label":"1/2"}],"default":"full","isVisible":"property.fields[index].type !== 'textarea' && property.fields[index].type !== 'file'"},{"type":"TEXT","id":"name","label":"제목 텍스트","default":""},{"type":"TEXT","id":"placeholder","label":"플레이스홀더","default":"입력해주세요","isVisible":"property.fields[index].type !== 'file'"},{"type":"TEXTAREA","id":"selectOptions","label":"드롭다운 값 설정","description":"각 선택지를 쉼표로 구분하여 입력해주세요.","isVisible":"property.fields[index].type === 'dropdown-single' || property.fields[index].type === 'dropdown-multi'"},{"type":"TEXT","id":"acceptedFormats","label":"허용 파일 형식","description":"예: .pdf,.doc,.docx,.jpg,.png (쉼표로 구분)","default":".pdf,.doc,.docx,.jpg,.jpeg,.png","isVisible":"property.fields[index].type === 'file'"},{"type":"RANGE","id":"maxFileSize","label":"최대 파일 크기","min":1,"max":20,"step":1,"unit":"MB","default":10,"isVisible":"property.fields[index].type === 'file'"},{"type":"CHECKBOX","id":"allowMultiple","label":"여러 파일 허용","default":true,"isVisible":"property.fields[index].type === 'file'"},{"type":"CHECKBOX","id":"isRequired","label":"필수 항목","default":false}]},{"type":"RANGE","id":"formMaxWidth","label":"폼 최대 너비","min":600,"max":1400,"step":50,"unit":"px","default":800,"isVisible":"property.layoutType == 'full'"},{"type":"TITLE","content":"📐 컨테이너 여백"},{"type":"RANGE","id":"containerPaddingTop","label":"상단 여백","min":0,"max":200,"step":5,"unit":"px","default":40},{"type":"RANGE","id":"containerPaddingRight","label":"우측 여백","min":0,"max":200,"step":5,"unit":"px","default":40},{"type":"RANGE","id":"containerPaddingBottom","label":"하단 여백","min":0,"max":200,"step":5,"unit":"px","default":40},{"type":"RANGE","id":"containerPaddingLeft","label":"좌측 여백","min":0,"max":200,"step":5,"unit":"px","default":40},{"type":"TITLE","content":"🖼️ 좌측 영역 설정 (이미지)","isVisible":"property.layoutType == 'split-image'"},{"type":"IMAGE_PICKER","id":"leftImage","label":"좌측 이미지","isVisible":"property.layoutType == 'split-image'"},{"type":"SELECT","id":"imagePosition","label":"이미지 표시 방식","options":[{"value":"cover","label":"꽉 채움"},{"value":"contain","label":"비율 유지"},{"value":"center","label":"가운데 정렬"}],"default":"cover","isVisible":"property.layoutType == 'split-image'"},{"type":"COLOR_PICKER","id":"imageBgColor","label":"이미지 영역 배경색","default":"#FAF8F5","isVisible":"property.layoutType == 'split-image'"},{"type":"TITLE","content":"✏️ 좌측 영역 설정 (텍스트)","isVisible":"property.layoutType == 'split-text'"},{"type":"RICH_TEXT","id":"leftTitle","label":"제목","default":"<h3>문의하기</h3>","isVisible":"property.layoutType == 'split-text'"},{"type":"RICH_TEXT","id":"leftDescription","label":"설명","default":"<p>궁금한 점이 있으시면 언제든지 연락해 주세요.</p>","isVisible":"property.layoutType == 'split-text'"},{"type":"COLOR_PICKER","id":"textBgColor","label":"텍스트 영역 배경색","default":"#FAF8F5","isVisible":"property.layoutType == 'split-text'"},{"type":"LIST","id":"contactItems","label":"연락처 정보","maxCount":6,"isVisible":"property.layoutType == 'split-text'","settings":[{"type":"SELECT","id":"icon","label":"아이콘","options":[{"value":"location","label":"위치"},{"value":"phone","label":"전화"},{"value":"email","label":"이메일"},{"value":"clock","label":"시간"},{"value":"website","label":"웹사이트"},{"value":"none","label":"없음"}],"default":"location"},{"type":"TEXT","id":"label","label":"라벨","default":"주소"},{"type":"TEXT","id":"value","label":"내용","default":"서울시 강남구"},{"type":"CHECKBOX","id":"isLink","label":"링크로 만들기","default":false},{"type":"TEXT","id":"linkUrl","label":"링크 URL","placeholder":"tel:, mailto:, https://","isVisible":"property.contactItems[index].isLink == true"}]},{"type":"CHECKBOX","id":"showLeftButton","label":"버튼 표시","default":false,"isVisible":"property.layoutType == 'split-text'"},{"type":"RICH_TEXT","id":"leftButtonText","label":"버튼 텍스트","default":"자세히 보기","isVisible":"property.layoutType == 'split-text' && property.showLeftButton == true"},{"type":"LINK","id":"leftButtonLink","label":"버튼 링크","isVisible":"property.layoutType == 'split-text' && property.showLeftButton == true"},{"type":"CHECKBOX","id":"leftButtonNewTab","label":"새 탭에서 열기","default":false,"isVisible":"property.layoutType == 'split-text' && property.showLeftButton == true"},{"type":"CHECKBOX","id":"showDivider","label":"구분선 표시","default":true,"isVisible":"property.layoutType == 'split-image' || property.layoutType == 'split-text'"},{"type":"COLOR_PICKER","id":"dividerColor","label":"구분선 색상","default":"#E8E0D5","isVisible":"(property.layoutType == 'split-image' || property.layoutType == 'split-text') && property.showDivider == true"},{"type":"RANGE","id":"dividerWidth","label":"구분선 두께","min":1,"max":5,"step":1,"unit":"px","default":1,"isVisible":"(property.layoutType == 'split-image' || property.layoutType == 'split-text') && property.showDivider == true"},{"type":"CHECKBOX","id":"showImageOnMobile","label":"모바일에서 좌측 영역 표시","default":true,"isVisible":"property.layoutType == 'split-image' || property.layoutType == 'split-text'"},{"type":"RANGE","id":"mobileImageHeight","label":"모바일 좌측 영역 높이","min":200,"max":500,"step":50,"unit":"px","default":300,"isVisible":"(property.layoutType == 'split-image' || property.layoutType == 'split-text') && property.showImageOnMobile == true"},{"type":"TITLE","content":"✏️ 폼 기본 설정"},{"type":"CHECKBOX","id":"showFormTitle","label":"폼 제목 표시","default":true},{"type":"RICH_TEXT","id":"formTitle","label":"폼 제목","default":"<h2>문의하기</h2>","isVisible":"property.showFormTitle == true"},{"type":"CHECKBOX","id":"showFormDescription","label":"폼 설명 표시","default":true},{"type":"RICH_TEXT","id":"formDescription","label":"폼 설명","default":"<p>궁금한 점이 있으시면 언제든지 문의해 주세요.</p>","isVisible":"property.showFormDescription == true"},{"type":"CHECKBOX","id":"showLoginBanner","label":"로그인 배너 표시","default":true},{"type":"RICH_TEXT","id":"loginBannerText","label":"로그인 안내 텍스트","default":"<p>회원이라면 로그인 후 문의해주세요</p>","isVisible":"property.showLoginBanner == true"},{"type":"CHECKBOX","id":"showPrivacyConsent","label":"개인정보 동의 항목 표시","description":"회원/비회원 모두에게 개인정보 수집 동의를 받습니다.","default":true},{"type":"RICH_TEXT","id":"privacyText","label":"개인정보 동의 텍스트","default":"개인 정보 수집 및 이용 동의","isVisible":"property.showPrivacyConsent == true"},{"type":"SELECT","id":"privacyDisplayType","label":"개인정보 약관 표시 방식","options":[{"value":"none","label":"표시 안함"},{"value":"link","label":"외부 링크"},{"value":"scrollbox","label":"스크롤 박스"}],"default":"none","isVisible":"property.showPrivacyConsent == true"},{"type":"TEXT","id":"privacyLinkUrl","label":"개인정보 약관 링크 URL","placeholder":"https://example.com/privacy","isVisible":"property.showPrivacyConsent == true && property.privacyDisplayType == 'link'"},{"type":"CHECKBOX","id":"privacyLinkNewTab","label":"새 탭에서 열기","default":true,"isVisible":"property.showPrivacyConsent == true && property.privacyDisplayType == 'link'"},{"type":"RICH_TEXT","id":"privacyTermsContent","label":"개인정보 약관 내용","default":"<p>수집하는 개인정보 항목: 이름, 연락처, 이메일 등</p><p>개인정보의 수집 및 이용목적: 고객 문의 응답 및 서비스 제공</p><p>개인정보의 보유 및 이용기간: 문의 처리 완료 후 1년</p><p>동의를 거부할 권리가 있으나, 동의 거부 시 서비스 이용에 제한이 있을 수 있습니다.</p>","isVisible":"property.showPrivacyConsent == true && property.privacyDisplayType == 'scrollbox'"},{"type":"TITLE","content":"🎨 버튼 설정"},{"type":"RICH_TEXT","id":"submitButtonText","label":"제출 버튼 텍스트","default":"문의 등록"},{"type":"SELECT","id":"buttonStyle","label":"버튼 스타일","options":[{"value":"filled","label":"채움"},{"value":"outline","label":"아웃라인"}],"default":"filled"},{"type":"COLOR_PICKER","id":"buttonBgColor","label":"버튼 배경색","default":"#3B2E2A","isVisible":"property.buttonStyle == 'filled'"},{"type":"COLOR_PICKER","id":"buttonTextColor","label":"버튼 텍스트 색상","default":"#FAF8F5","isVisible":"property.buttonStyle == 'filled'"},{"type":"CHECKBOX","id":"buttonFilledBorder","label":"버튼 테두리 사용","default":false,"isVisible":"property.buttonStyle == 'filled'"},{"type":"COLOR_PICKER","id":"buttonFilledBorderColor","label":"버튼 테두리 색상","default":"#3B2E2A","isVisible":"property.buttonStyle == 'filled' && property.buttonFilledBorder == true"},{"type":"RANGE","id":"buttonFilledBorderWidth","label":"버튼 테두리 두께","min":1,"max":4,"step":1,"unit":"px","default":1,"isVisible":"property.buttonStyle == 'filled' && property.buttonFilledBorder == true"},{"type":"COLOR_PICKER","id":"buttonHoverBgColor","label":"버튼 호버 배경색","default":"#2A1F1C","isVisible":"property.buttonStyle == 'filled'"},{"type":"COLOR_PICKER","id":"buttonHoverTextColor","label":"버튼 호버 텍스트 색상","default":"#FAF8F5","isVisible":"property.buttonStyle == 'filled'"},{"type":"COLOR_PICKER","id":"buttonFilledHoverBorderColor","label":"버튼 호버 테두리 색상","default":"#2A1F1C","isVisible":"property.buttonStyle == 'filled' && property.buttonFilledBorder == true"},{"type":"COLOR_PICKER","id":"buttonOutlineColor","label":"버튼 테두리 색상","default":"#3B2E2A","isVisible":"property.buttonStyle == 'outline'"},{"type":"RANGE","id":"buttonOutlineBorderWidth","label":"버튼 테두리 두께","min":1,"max":4,"step":1,"unit":"px","default":1,"isVisible":"property.buttonStyle == 'outline'"},{"type":"COLOR_PICKER","id":"buttonOutlineTextColor","label":"버튼 텍스트 색상","default":"#3B2E2A","isVisible":"property.buttonStyle == 'outline'"},{"type":"COLOR_PICKER","id":"buttonOutlineHoverBg","label":"버튼 호버 배경색","default":"#3B2E2A","isVisible":"property.buttonStyle == 'outline'"},{"type":"COLOR_PICKER","id":"buttonOutlineHoverText","label":"버튼 호버 텍스트 색상","default":"#FAF8F5","isVisible":"property.buttonStyle == 'outline'"},{"type":"COLOR_PICKER","id":"buttonOutlineHoverBorderColor","label":"버튼 호버 테두리 색상","default":"#2A1F1C","isVisible":"property.buttonStyle == 'outline'"},{"type":"RANGE","id":"buttonBorderRadius","label":"버튼 모서리 둥글기","min":0,"max":50,"step":1,"unit":"px","default":0},{"type":"RANGE","id":"buttonFontSize","label":"버튼 글씨 크기","min":12,"max":24,"step":1,"unit":"px","default":14},{"type":"TITLE","content":"✏️ 글씨 크기 설정"},{"type":"RANGE","id":"titleFontSize","label":"제목 글씨 크기","min":16,"max":48,"step":1,"unit":"px","default":24},{"type":"RANGE","id":"descriptionFontSize","label":"설명 글씨 크기","min":12,"max":20,"step":1,"unit":"px","default":14},{"type":"RANGE","id":"labelFontSize","label":"라벨 글씨 크기","min":12,"max":18,"step":1,"unit":"px","default":14},{"type":"RANGE","id":"inputFontSize","label":"입력 필드 글씨 크기","min":12,"max":18,"step":1,"unit":"px","default":14},{"type":"RANGE","id":"bannerFontSize","label":"배너 글씨 크기","min":12,"max":18,"step":1,"unit":"px","default":14},{"type":"RANGE","id":"privacyFontSize","label":"개인정보 동의 글씨 크기","min":12,"max":18,"step":1,"unit":"px","default":13},{"type":"RANGE","id":"counterFontSize","label":"카운터 글씨 크기","min":10,"max":16,"step":1,"unit":"px","default":12},{"type":"RANGE","id":"alertFontSize","label":"알림 글씨 크기","min":12,"max":18,"step":1,"unit":"px","default":14},{"type":"RANGE","id":"contactFontSize","label":"연락처 글씨 크기","min":12,"max":18,"step":1,"unit":"px","default":14,"isVisible":"property.layoutType == 'split-text'"},{"type":"TITLE","content":"🎨 스타일 설정"},{"type":"COLOR_PICKER","id":"primaryColor","label":"메인 색상","default":"#3B2E2A"},{"type":"COLOR_PICKER","id":"formBgColor","label":"폼 배경색","default":"#FFFFFF"},{"type":"COLOR_PICKER","id":"fieldBgColor","label":"입력 필드 배경색","default":"#FAF8F5"},{"type":"COLOR_PICKER","id":"fieldBorderColor","label":"입력 필드 테두리 색상","default":"#E8E0D5"},{"type":"COLOR_PICKER","id":"fieldFocusBorderColor","label":"입력 필드 포커스 테두리 색상","default":"#8C6F5E"},{"type":"RANGE","id":"fieldBorderWidth","label":"입력 필드 테두리 두께","min":1,"max":3,"step":0.5,"unit":"px","default":1},{"type":"RANGE","id":"fieldBorderRadius","label":"입력 필드 모서리 둥글기","min":0,"max":30,"step":1,"unit":"px","default":4},{"type":"RANGE","id":"fieldSpacing","label":"필드 간격","min":10,"max":40,"step":2,"unit":"px","default":20},{"type":"CHECKBOX","id":"showShadow","label":"폼 그림자 효과","default":false}],"property":{"board":{"id":"","posts":{"limit":0,"page":1,"sort":""}},"useSubmitRange":false,"submitStart":"","submitEnd":"","layoutType":"full","formMaxWidth":800,"containerPaddingTop":40,"containerPaddingRight":40,"containerPaddingBottom":40,"containerPaddingLeft":40,"leftImage":"https://ss3-prod-static-files.s3.ap-northeast-2.amazonaws.com/block-image-library/lifestyle/image15.jpg","imagePosition":"cover","imageBgColor":"#FAF8F5","leftTitle":"<h3>문의하기</h3>","leftDescription":"<p>궁금한 점이 있으시면 언제든지 연락해 주세요.</p>","textBgColor":"#FAF8F5","contactItems":[{"icon":"location","label":"주소","value":"서울시 강남구 테헤란로 123","isLink":false,"linkUrl":""},{"icon":"phone","label":"전화","value":"02-1234-5678","isLink":true,"linkUrl":"tel:02-1234-5678"},{"icon":"email","label":"이메일","value":"contact@example.com","isLink":true,"linkUrl":"mailto:contact@example.com"}],"showLeftButton":false,"leftButtonText":"자세히 보기","leftButtonLink":{"type":"url","label":"","value":""},"leftButtonNewTab":false,"showDivider":true,"dividerColor":"#E8E0D5","dividerWidth":1,"showImageOnMobile":true,"mobileImageHeight":300,"showFormTitle":true,"formTitle":"<h2>문의하기</h2>","showFormDescription":true,"formDescription":"<p>궁금한 점이 있으시면 언제든지 문의해 주세요.</p>","showLoginBanner":true,"loginBannerText":"<p>회원이라면 로그인 후 문의해주세요</p>","showPrivacyConsent":true,"privacyText":"개인 정보 수집 및 이용 동의","privacyDisplayType":"none","privacyLinkUrl":"","privacyLinkNewTab":true,"privacyTermsContent":"<p>수집하는 개인정보 항목: 이름, 연락처, 이메일 등</p><p>개인정보의 수집 및 이용목적: 고객 문의 응답 및 서비스 제공</p><p>개인정보의 보유 및 이용기간: 문의 처리 완료 후 1년</p><p>동의를 거부할 권리가 있으나, 동의 거부 시 서비스 이용에 제한이 있을 수 있습니다.</p>","fields":[{"type":"text","fieldSpan":"half","name":"이름 Name:","placeholder":"","selectOptions":null,"acceptedFormats":".pdf,.doc,.docx,.jpg,.jpeg,.png","maxFileSize":10,"allowMultiple":true,"isRequired":false},{"type":"text","fieldSpan":"half","name":"연락처 Phone No:","placeholder":"","selectOptions":null,"acceptedFormats":".pdf,.doc,.docx,.jpg,.jpeg,.png","maxFileSize":10,"allowMultiple":true,"isRequired":false},{"type":"text","fieldSpan":"half","name":"이메일 E-mail:","placeholder":"입력해주세요","selectOptions":null,"acceptedFormats":".pdf,.doc,.docx,.jpg,.jpeg,.png","maxFileSize":10,"allowMultiple":true,"isRequired":false},{"type":"dropdown-single","fieldSpan":"half","name":"문의구분:","placeholder":"(선택)","selectOptions":"단체출강, 원데이클래스, 맞춤제작, 기타","acceptedFormats":".pdf,.doc,.docx,.jpg,.jpeg,.png","maxFileSize":10,"allowMultiple":true,"isRequired":false},{"type":"textarea","fieldSpan":"full","name":"내용 Message:","placeholder":"","selectOptions":null,"acceptedFormats":".pdf,.doc,.docx,.jpg,.jpeg,.png","maxFileSize":10,"allowMultiple":true,"isRequired":false}],"submitButtonText":"문의 등록","buttonStyle":"filled","buttonBgColor":"#3B2E2A","buttonTextColor":"#FAF8F5","buttonFilledBorder":false,"buttonFilledBorderColor":"#3B2E2A","buttonFilledBorderWidth":1,"buttonHoverBgColor":"#2A1F1C","buttonHoverTextColor":"#FAF8F5","buttonFilledHoverBorderColor":"#2A1F1C","buttonOutlineColor":"#3B2E2A","buttonOutlineBorderWidth":1,"buttonOutlineTextColor":"#3B2E2A","buttonOutlineHoverBg":"#3B2E2A","buttonOutlineHoverText":"#FAF8F5","buttonOutlineHoverBorderColor":"#2A1F1C","buttonBorderRadius":0,"buttonFontSize":14,"titleFontSize":24,"descriptionFontSize":14,"labelFontSize":14,"inputFontSize":14,"bannerFontSize":14,"privacyFontSize":13,"counterFontSize":12,"alertFontSize":14,"contactFontSize":14,"primaryColor":"#3B2E2A","formBgColor":"#FFFFFF","fieldBgColor":"#FAF8F5","fieldBorderColor":"#E8E0D5","fieldFocusBorderColor":"#8C6F5E","fieldBorderWidth":1,"fieldBorderRadius":4,"fieldSpacing":20,"showShadow":false}}
