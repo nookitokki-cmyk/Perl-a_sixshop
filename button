@@ -1,0 +1,224 @@
+<style>
+/* ===== 버튼 컨테이너 ===== */
+.bm-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: {{property.buttonGap}}px;
+  width: 100%;
+  padding: 0;
+  font-family: var(--font-family-body);
+}
+
+/* ===== PC 정렬 ===== */
+@media (min-width: 769px) {
+  .bm-btn-group {
+    {{#if (eq property.alignPC 'left')}}
+    justify-content: flex-start;
+    {{/if}}
+    {{#if (eq property.alignPC 'center')}}
+    justify-content: center;
+    {{/if}}
+    {{#if (eq property.alignPC 'right')}}
+    justify-content: flex-end;
+    {{/if}}
+    {{#if (eq property.alignPC 'stretch')}}
+    justify-content: stretch;
+    {{/if}}
+    {{#if (eq property.alignPC 'space-between')}}
+    justify-content: space-between;
+    {{/if}}
+  }
+
+  {{#if (eq property.alignPC 'stretch')}}
+  .bm-btn-group .bm-btn-group__btn {
+    flex: 1;
+  }
+  {{/if}}
+}
+
+/* ===== 모바일 정렬 ===== */
+@media (max-width: 768px) {
+  .bm-btn-group {
+    {{#if (eq property.alignMobile 'left')}}
+    justify-content: flex-start;
+    {{/if}}
+    {{#if (eq property.alignMobile 'center')}}
+    justify-content: center;
+    {{/if}}
+    {{#if (eq property.alignMobile 'right')}}
+    justify-content: flex-end;
+    {{/if}}
+    {{#if (eq property.alignMobile 'stretch')}}
+    justify-content: stretch;
+    {{/if}}
+    {{#if (eq property.alignMobile 'space-between')}}
+    justify-content: space-between;
+    {{/if}}
+  }
+
+  {{#if (eq property.alignMobile 'stretch')}}
+  .bm-btn-group .bm-btn-group__btn {
+    flex: 1;
+  }
+  {{/if}}
+}
+
+/* ===== 버튼 공통 ===== */
+.bm-btn-group__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color {{property.animationDuration}}s ease-out,
+              border-color {{property.animationDuration}}s ease-out;
+  font-size: {{property.btnPcSize}}px;
+  padding: {{property.btnPcPaddingY}}px {{property.btnPcPaddingX}}px;
+  background-color: {{property.bgColor}};
+  color: {{property.textColor}};
+  border: {{property.borderWidth}}px solid {{property.borderColor}};
+  border-radius: {{property.borderRadius}}px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1;
+}
+
+/* ===== 버튼 텍스트 ===== */
+.bm-btn-group__text {
+  position: relative;
+  z-index: 1;
+  transition: color {{property.animationDuration}}s ease-out;
+}
+
+/* ===== 채우기 효과 ===== */
+.bm-btn-group__btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: {{property.hoverBgColor}};
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform {{property.animationDuration}}s ease-out;
+  z-index: 0;
+}
+
+/* ===== 호버 ===== */
+.bm-btn-group__btn:hover::before,
+.bm-btn-group__btn:focus::before {
+  transform: scaleX(1);
+}
+
+.bm-btn-group__btn:hover .bm-btn-group__text,
+.bm-btn-group__btn:focus .bm-btn-group__text {
+  color: {{property.hoverTextColor}};
+}
+
+.bm-btn-group__btn:hover,
+.bm-btn-group__btn:focus {
+  border-color: {{property.hoverBorderColor}};
+}
+
+/* ===== 키보드 포커스 ===== */
+.bm-btn-group__btn:focus {
+  outline: 2px solid {{property.hoverBgColor}};
+  outline-offset: 2px;
+}
+
+/* ===== 모바일 오버라이드 ===== */
+@media (max-width: 768px) {
+  .bm-btn-group__btn {
+    font-size: {{property.btnMoSize}}px;
+    padding: {{property.btnMoPaddingY}}px {{property.btnMoPaddingX}}px;
+    min-width: 80px;
+  }
+}
+
+/* ===== 터치 디바이스 (호버 고착 방지) ===== */
+@media (hover: none) {
+  .bm-btn-group__btn:hover::before {
+    transform: scaleX(0);
+  }
+
+  .bm-btn-group__btn:hover .bm-btn-group__text {
+    color: {{property.textColor}};
+  }
+
+  .bm-btn-group__btn:hover {
+    border-color: {{property.borderColor}};
+  }
+
+  .bm-btn-group__btn:active::before {
+    transform: scaleX(1);
+  }
+
+  .bm-btn-group__btn:active .bm-btn-group__text {
+    color: {{property.hoverTextColor}};
+  }
+
+  .bm-btn-group__btn:active {
+    border-color: {{property.hoverBorderColor}};
+  }
+}
+
+/* ===== 빈 상태 ===== */
+.bm-btn-group__empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #8C7B72;
+  font-size: 14px;
+}
+</style>
+
+<template>
+  <div class="bm-btn-group">
+    {{#if property.buttons.length}}
+      {{#each property.buttons}}
+        {{#if link.value}}
+          <a href="{{link.value}}" {{#if openInNewTab}}target="_blank" rel="noopener noreferrer"{{/if}} class="bm-btn-group__btn" role="button" tabindex="0" aria-label="{{text}}">
+            <span class="bm-btn-group__text">{{text}}</span>
+          </a>
+        {{else}}
+          <span class="bm-btn-group__btn" role="button" tabindex="0" aria-label="{{text}}" style="cursor: default;">
+            <span class="bm-btn-group__text">{{text}}</span>
+          </span>
+        {{/if}}
+      {{/each}}
+    {{else}}
+      <div class="bm-btn-group__empty">
+        버튼을 추가해주세요. 설정 패널에서 "버튼 목록"을 클릭하여 버튼을 추가할 수 있습니다.
+      </div>
+    {{/if}}
+  </div>
+</template>
+
+<script>
+var container = bm.container;
+var context = bm.context;
+
+function handleKeyboard(event) {
+  var target = event.target;
+  if ((event.key === 'Enter' || event.key === ' ') && target.matches('.bm-btn-group__btn')) {
+    event.preventDefault();
+    if (target.tagName === 'A') {
+      target.click();
+    }
+  }
+}
+
+container.addEventListener('keydown', handleKeyboard, true);
+
+bm.onContextChange = function() {};
+
+bm.onDestroy = function() {
+  container.removeEventListener('keydown', handleKeyboard, true);
+};
+</script>
+
+{"settings":[{"type":"TITLE","content":"누끼토끼 전문 개발 블록"},{"type":"DESCRIPTION","content":"【 안내 】\n코드 없이 직접 운영하실 수 있도록\n전문 개발자가 기획·설계·구현했습니다.\n간단한 수정은 블록 AI를 활용하시고,\n고도화된 커스텀이 필요하시면\n전문가에게 의뢰해 주세요."},{"type":"TITLE","content":"📋 버튼 목록"},{"type":"LIST","id":"buttons","label":"버튼 목록","maxCount":10,"settings":[{"type":"TEXT","id":"text","label":"버튼 텍스트","default":"버튼"},{"type":"LINK","id":"link","label":"링크","default":{"type":"url","value":"/","label":"/"}},{"type":"CHECKBOX","id":"openInNewTab","label":"새 탭에서 열기","default":false}]},{"type":"RANGE","id":"buttonGap","label":"버튼 간격","min":0,"max":40,"step":4,"unit":"px","default":12},{"type":"TITLE","content":"✏️ 글씨 크기"},{"type":"RANGE","id":"btnPcSize","label":"PC 글씨 크기","min":10,"max":24,"step":1,"unit":"px","default":14},{"type":"RANGE","id":"btnMoSize","label":"모바일 글씨 크기","min":10,"max":20,"step":1,"unit":"px","default":13},{"type":"TITLE","content":"📐 PC 여백"},{"type":"RANGE","id":"btnPcPaddingY","label":"PC 상하 안쪽 여백","min":0,"max":30,"step":1,"unit":"px","default":10},{"type":"RANGE","id":"btnPcPaddingX","label":"PC 좌우 안쪽 여백","min":0,"max":60,"step":2,"unit":"px","default":28},{"type":"TITLE","content":"📐 모바일 여백"},{"type":"RANGE","id":"btnMoPaddingY","label":"모바일 상하 안쪽 여백","min":0,"max":24,"step":1,"unit":"px","default":10},{"type":"RANGE","id":"btnMoPaddingX","label":"모바일 좌우 안쪽 여백","min":0,"max":48,"step":2,"unit":"px","default":24},{"type":"TITLE","content":"🎨 테두리"},{"type":"RANGE","id":"borderRadius","label":"모서리 둥글기","min":0,"max":100,"step":2,"unit":"px","default":0},{"type":"RANGE","id":"borderWidth","label":"테두리 두께","min":0,"max":5,"step":1,"unit":"px","default":0},{"type":"TITLE","content":"🎨 기본 색상"},{"type":"COLOR_PICKER","id":"bgColor","label":"배경색","default":"#3B2E2A"},{"type":"COLOR_PICKER","id":"textColor","label":"텍스트색","default":"#FAF8F5"},{"type":"COLOR_PICKER","id":"borderColor","label":"테두리색","default":"#3B2E2A"},{"type":"TITLE","content":"🎬 호버 효과"},{"type":"COLOR_PICKER","id":"hoverBgColor","label":"호버 배경색","default":"#2A1F1C"},{"type":"COLOR_PICKER","id":"hoverTextColor","label":"호버 텍스트색","default":"#FAF8F5"},{"type":"COLOR_PICKER","id":"hoverBorderColor","label":"호버 테두리색","default":"#2A1F1C"},{"type":"RANGE","id":"animationDuration","label":"애니메이션 속도","min":0.1,"max":1,"step":0.1,"unit":"s","default":0.2},{"type":"TITLE","content":"⚙️ 정렬"},{"type":"SELECT","id":"alignPC","label":"PC 정렬","options":[{"value":"left","label":"왼쪽"},{"value":"center","label":"가운데"},{"value":"right","label":"오른쪽"},{"value":"stretch","label":"양쪽 늘림"},{"value":"space-between","label":"양쪽 정렬"}],"default":"center"},{"type":"SELECT","id":"alignMobile","label":"모바일 정렬","options":[{"value":"left","label":"왼쪽"},{"value":"center","label":"가운데"},{"value":"right","label":"오른쪽"},{"value":"stretch","label":"양쪽 늘림"},{"value":"space-between","label":"양쪽 정렬"}],"default":"center"}],"property":{"buttons":[{"text":"구매하기","link":{"type":"url","value":"/","label":"/"},"openInNewTab":false},{"text":"자세히 보기","link":{"type":"url","value":"/","label":"/"},"openInNewTab":false}],"buttonGap":12,"btnPcSize":14,"btnMoSize":13,"btnPcPaddingY":10,"btnPcPaddingX":28,"btnMoPaddingY":10,"btnMoPaddingX":24,"borderRadius":0,"borderWidth":0,"bgColor":"#3B2E2A","textColor":"#FAF8F5","borderColor":"#3B2E2A","hoverBgColor":"#2A1F1C","hoverTextColor":"#FAF8F5","hoverBorderColor":"#2A1F1C","animationDuration":0.2,"alignPC":"center","alignMobile":"center"}}
