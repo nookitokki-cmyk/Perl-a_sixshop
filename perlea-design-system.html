@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perléa — Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <style>
+    :root {
+      /* ─── Brand Colors ─── */
+      --color-primary:       #3B2E2A;   /* Deep Walnut — 메인 텍스트, 주요 버튼 */
+      --color-primary-hover: #2A1F1C;
+      --color-secondary:     #8C6F5E;   /* Warm Taupe — 강조, 서브 버튼 */
+      --color-secondary-hover: #7A5E4E;
+      --color-accent:        #C4A882;   /* Pearl Sand — 배지, 하이라이트 */
+      --color-accent-light:  #EDE3D8;   /* Ivory Mist — 배경 배지 */
+
+      --color-bg:            #FAF8F5;   /* Off-White — 페이지 배경 */
+      --color-surface:       #FFFFFF;   /* 카드/섹션 배경 */
+      --color-border:        #E8E0D5;   /* 구분선 */
+
+      --color-text-title:    #1E1410;   /* 제목 */
+      --color-text-emphasis: #3B2E2A;   /* 강조 */
+      --color-text-body:     #4A3F38;   /* 본문 */
+      --color-text-desc:     #8C7B72;   /* 디스크립션 */
+      --color-text-badge:    #7A5E4E;   /* 배지 텍스트 */
+
+      --color-success:       #6B8F71;
+      --color-error:         #B85C5C;
+      --color-warning:       #C4924A;
+
+      /* ─── Typography ─── */
+      --font-heading: 'Noto Serif KR', 'Bon Myeongjo', serif;
+      --font-body:    'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --letter-spacing: -0.01em;
+
+      /* Desktop Scale */
+      --fs-title:    2.5rem;    /* 40px */
+      --fs-h1:       2rem;      /* 32px */
+      --fs-h2:       1.5rem;    /* 24px */
+      --fs-emphasis: 1.125rem;  /* 18px */
+      --fs-badge:    0.75rem;   /* 12px */
+      --fs-body:     1rem;      /* 16px */
+      --fs-desc:     0.875rem;  /* 14px */
+
+      --lh-heading: 1.4;
+      --lh-body:    1.75;
+
+      /* Spacing */
+      --space-xs:  4px;
+      --space-sm:  8px;
+      --space-md:  16px;
+      --space-lg:  24px;
+      --space-xl:  40px;
+      --space-2xl: 64px;
+
+      /* Radius */
+      --radius-sm:   4px;
+      --radius-md:   8px;
+      --radius-lg:   16px;
+      --radius-full: 999px;
+
+      /* Shadow */
+      --shadow-sm: 0 1px 4px rgba(59,46,42,0.06);
+      --shadow-md: 0 4px 16px rgba(59,46,42,0.10);
+      --shadow-lg: 0 8px 32px rgba(59,46,42,0.14);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text-body);
+      letter-spacing: var(--letter-spacing);
+      line-height: var(--lh-body);
+      font-size: var(--fs-body);
+    }
+
+    /* ─── Layout ─── */
+    .ds-header {
+      background: var(--color-primary);
+      color: #FAF8F5;
+      padding: var(--space-xl) var(--space-2xl);
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-lg);
+    }
+    .ds-header__brand {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      line-height: 1;
+    }
+    .ds-header__sub {
+      font-family: var(--font-body);
+      font-size: var(--fs-desc);
+      color: var(--color-accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding-bottom: 6px;
+    }
+
+    .ds-nav {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 var(--space-2xl);
+      display: flex;
+      gap: var(--space-xl);
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .ds-nav a {
+      font-size: var(--fs-desc);
+      font-weight: 500;
+      color: var(--color-text-desc);
+      text-decoration: none;
+      padding: var(--space-md) 0;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .ds-nav a:hover {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+
+    .ds-main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--space-2xl) var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+    }
+
+    .ds-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .ds-section__header {
+      padding: var(--space-lg) var(--space-xl);
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-bg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    .ds-section__num {
+      width: 28px; height: 28px;
+      background: var(--color-primary);
+      color: #FAF8F5;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ds-section__title {
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--color-text-title);
+      letter-spacing: 0.02em;
+    }
+    .ds-section__body {
+      padding: var(--space-xl);
+    }
+
+    /* ─── Color Swatches ─── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: var(--space-md);
+    }
+    .color-swatch {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+    .color-swatch__block {
+      height: 80px;
+    }
+    .color-swatch__info {
+      padding: var(--space-sm) var(--space-md);
+      background: var(--color-surface);
+    }
+    .color-swatch__name {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-text-body);
+    }
+    .color-swatch__hex {
+      font-size: 0.75rem;
+      color: var(--color-text-desc);
+      font-family: 'Courier New', monospace;
+      margin-top: 2px;
+    }
+    .color-swatch__role {
+      font-size: 0.6875rem;
+      color: var(--color-text-desc);
+      margin-top: 2px;
+    }
+
+    .color-section-label {
+      font-size: var(--fs-desc);
+      font-weight: 600;
+      color: var(--color-text-desc);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-md);
+      margin-top: var(--space-xl);
+    }
+    .color-section-label:first-child { margin-top: 0; }
+
+    /* ─── Typography ─── */
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-xl);
+      padding: var(--space-lg) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .type-row:last-child { border-bottom: none; }
+    .type-meta {
+      width: 200px;
+      flex-shrink: 0;
+    }
+    .type-meta__label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-text-badge);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .type-meta__spec {
+      font-size: 0.75rem;
+      color: var(--color-text-desc);
+      margin-top: 4px;
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+    }
+    .type-preview { flex: 1; }
+
+    .type-title    { font-family: var(--font-heading); font-size: var(--fs-title);    font-weight: 400; color: var(--color-text-title);    line-height: var(--lh-heading); letter-spacing: -0.01em; }
+    .type-h1       { font-family: var(--font-heading); font-size: var(--fs-h1);       font-weight: 400; color: var(--color-text-title);    line-height: var(--lh-heading); letter-spacing: -0.01em; }
+    .type-h2       { font-family: var(--font-heading); font-size: var(--fs-h2);       font-weight: 500; color: var(--color-text-title);    line-height: var(--lh-heading); letter-spacing: -0.01em; }
+    .type-emphasis { font-family: var(--font-body);    font-size: var(--fs-emphasis); font-weight: 600; color: var(--color-text-emphasis); line-height: 1.5; letter-spacing: -0.01em; }
+    .type-body     { font-family: var(--font-body);    font-size: var(--fs-body);     font-weight: 400; color: var(--color-text-body);     line-height: var(--lh-body);    letter-spacing: -0.01em; }
+    .type-desc     { font-family: var(--font-body);    font-size: var(--fs-desc);     font-weight: 400; color: var(--color-text-desc);     line-height: 1.6;               letter-spacing: -0.01em; }
+    .type-badge-text { font-family: var(--font-body);  font-size: var(--fs-badge);    font-weight: 600; color: var(--color-text-badge);    line-height: 1;                 letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* ─── Badges ─── */
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-body);
+      font-size: var(--fs-badge);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      line-height: 1;
+    }
+    .badge--primary   { background: var(--color-primary);      color: #FAF8F5; }
+    .badge--secondary { background: var(--color-accent-light);  color: var(--color-text-badge); border: 1px solid var(--color-accent); }
+    .badge--accent    { background: var(--color-accent);        color: var(--color-primary); }
+    .badge--outline   { background: transparent; color: var(--color-primary); border: 1px solid var(--color-primary); }
+    .badge--success   { background: #EBF3EC; color: var(--color-success); }
+    .badge--error     { background: #FAEAEA; color: var(--color-error); }
+    .badge--warning   { background: #FDF3E6; color: var(--color-warning); }
+
+    /* ─── Buttons ─── */
+    .btn-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+    .btn-row-label {
+      font-size: var(--fs-desc);
+      font-weight: 600;
+      color: var(--color-text-desc);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-md);
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-weight: 500;
+      letter-spacing: var(--letter-spacing);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    /* Sizes */
+    .btn--lg { font-size: 1rem;          padding: 14px 32px; border-radius: var(--radius-md); }
+    .btn--md { font-size: 0.9375rem;     padding: 11px 24px; border-radius: var(--radius-md); }
+    .btn--sm { font-size: 0.8125rem;     padding: 8px  18px; border-radius: var(--radius-sm); }
+    .btn--xs { font-size: 0.75rem;       padding: 5px  14px; border-radius: var(--radius-sm); }
+
+    /* Variants */
+    .btn--primary   { background: var(--color-primary);   color: #FAF8F5; box-shadow: var(--shadow-sm); }
+    .btn--primary:hover { background: var(--color-primary-hover); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+    .btn--secondary { background: var(--color-secondary); color: #FAF8F5; box-shadow: var(--shadow-sm); }
+    .btn--secondary:hover { background: var(--color-secondary-hover); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+    .btn--accent    { background: var(--color-accent);    color: var(--color-primary); box-shadow: var(--shadow-sm); }
+    .btn--accent:hover { background: #B89870; box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+    .btn--outline   { background: transparent; color: var(--color-primary); border: 1.5px solid var(--color-primary); }
+    .btn--outline:hover { background: var(--color-primary); color: #FAF8F5; }
+
+    .btn--outline-secondary { background: transparent; color: var(--color-secondary); border: 1.5px solid var(--color-secondary); }
+    .btn--outline-secondary:hover { background: var(--color-secondary); color: #FAF8F5; }
+
+    .btn--ghost     { background: transparent; color: var(--color-text-body); }
+    .btn--ghost:hover { background: var(--color-border); }
+
+    .btn--text      { background: transparent; color: var(--color-secondary); padding-left: 0; padding-right: 0; }
+    .btn--text:hover { color: var(--color-primary); }
+
+    .btn--full      { width: 100%; }
+    .btn--rounded   { border-radius: var(--radius-full) !important; }
+    .btn--disabled  { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+    /* ─── Spacing ─── */
+    .spacing-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .spacing-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+    .spacing-block {
+      background: var(--color-accent);
+      height: 24px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .spacing-label {
+      font-size: var(--fs-desc);
+      color: var(--color-text-desc);
+      font-family: 'Courier New', monospace;
+      width: 120px;
+      flex-shrink: 0;
+    }
+    .spacing-name {
+      font-size: var(--fs-desc);
+      font-weight: 600;
+      color: var(--color-text-body);
+      width: 80px;
+    }
+
+    /* ─── Mobile Preview ─── */
+    .mobile-preview-wrap {
+      display: flex;
+      gap: var(--space-xl);
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .mobile-frame {
+      width: 375px;
+      min-height: 600px;
+      border: 2px solid var(--color-border);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      background: var(--color-bg);
+      flex-shrink: 0;
+    }
+    .mobile-frame__bar {
+      background: var(--color-primary);
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mobile-frame__notch {
+      width: 120px; height: 20px;
+      background: #1E1410;
+      border-radius: 0 0 14px 14px;
+    }
+    .mobile-frame__content {
+      padding: 20px;
+    }
+
+    .mobile-type-title    { font-family: var(--font-heading); font-size: 1.75rem;  font-weight: 400; color: var(--color-text-title);    line-height: 1.3; letter-spacing: -0.01em; }
+    .mobile-type-h1       { font-family: var(--font-heading); font-size: 1.375rem; font-weight: 400; color: var(--color-text-title);    line-height: 1.35; letter-spacing: -0.01em; }
+    .mobile-type-h2       { font-family: var(--font-heading); font-size: 1.125rem; font-weight: 500; color: var(--color-text-title);    line-height: 1.4; letter-spacing: -0.01em; }
+    .mobile-type-emphasis { font-family: var(--font-body);    font-size: 0.9375rem;font-weight: 600; color: var(--color-text-emphasis); line-height: 1.5; letter-spacing: -0.01em; }
+    .mobile-type-body     { font-family: var(--font-body);    font-size: 0.9375rem;font-weight: 400; color: var(--color-text-body);     line-height: 1.75; letter-spacing: -0.01em; }
+    .mobile-type-desc     { font-family: var(--font-body);    font-size: 0.8125rem;font-weight: 400; color: var(--color-text-desc);     line-height: 1.6; letter-spacing: -0.01em; }
+
+    .mobile-spec-table {
+      flex: 1;
+      min-width: 280px;
+    }
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--fs-desc);
+    }
+    .spec-table th {
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--color-bg);
+      color: var(--color-text-desc);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .spec-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-text-body);
+      font-family: 'Courier New', monospace;
+      font-size: 0.8125rem;
+    }
+    .spec-table td:first-child {
+      font-family: var(--font-body);
+      font-weight: 600;
+      color: var(--color-text-emphasis);
+    }
+
+    /* ─── Divider ─── */
+    .ds-divider {
+      height: 1px;
+      background: var(--color-border);
+      margin: var(--space-xl) 0;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .ds-header { padding: var(--space-xl) var(--space-lg); flex-direction: column; align-items: flex-start; gap: var(--space-sm); }
+      .ds-header__brand { font-size: 2.25rem; }
+      .ds-nav { padding: 0 var(--space-lg); gap: var(--space-lg); }
+      .ds-main { padding: var(--space-xl) var(--space-lg); }
+      .ds-section__body { padding: var(--space-lg); }
+      .type-row { flex-direction: column; gap: var(--space-sm); }
+      .type-meta { width: 100%; }
+      .mobile-frame { width: 100%; }
+      .color-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="ds-header">
+  <div class="ds-header__brand">Perléa</div>
+  <div class="ds-header__sub">Design System v1.0</div>
+</header>
+
+<!-- Nav -->
+<nav class="ds-nav">
+  <a href="#colors">Colors</a>
+  <a href="#typography">Typography</a>
+  <a href="#badges">Badges</a>
+  <a href="#buttons">Buttons</a>
+  <a href="#spacing">Spacing</a>
+  <a href="#mobile">Mobile</a>
+</nav>
+
+<main class="ds-main">
+
+  <!-- 1. Colors -->
+  <section class="ds-section" id="colors">
+    <div class="ds-section__header">
+      <div class="ds-section__num">1</div>
+      <div class="ds-section__title">Color System</div>
+    </div>
+    <div class="ds-section__body">
+
+      <div class="color-section-label">Brand Colors</div>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#3B2E2A;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Primary</div>
+            <div class="color-swatch__hex">#3B2E2A</div>
+            <div class="color-swatch__role">메인 버튼 · 제목</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#8C6F5E;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Secondary</div>
+            <div class="color-swatch__hex">#8C6F5E</div>
+            <div class="color-swatch__role">서브 버튼 · 강조</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#C4A882;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Accent</div>
+            <div class="color-swatch__hex">#C4A882</div>
+            <div class="color-swatch__role">배지 · 하이라이트</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#EDE3D8;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Accent Light</div>
+            <div class="color-swatch__hex">#EDE3D8</div>
+            <div class="color-swatch__role">배지 배경 · 태그</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="color-section-label">Background & Surface</div>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#FAF8F5; border:1px solid #E8E0D5;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Background</div>
+            <div class="color-swatch__hex">#FAF8F5</div>
+            <div class="color-swatch__role">페이지 배경</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#FFFFFF; border:1px solid #E8E0D5;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Surface</div>
+            <div class="color-swatch__hex">#FFFFFF</div>
+            <div class="color-swatch__role">카드 · 섹션 배경</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#E8E0D5;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Border</div>
+            <div class="color-swatch__hex">#E8E0D5</div>
+            <div class="color-swatch__role">구분선 · 테두리</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="color-section-label">Text Colors</div>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#1E1410;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Title</div>
+            <div class="color-swatch__hex">#1E1410</div>
+            <div class="color-swatch__role">제목 텍스트</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#3B2E2A;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Emphasis</div>
+            <div class="color-swatch__hex">#3B2E2A</div>
+            <div class="color-swatch__role">강조 텍스트</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#4A3F38;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Body</div>
+            <div class="color-swatch__hex">#4A3F38</div>
+            <div class="color-swatch__role">본문 텍스트</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#8C7B72;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Description</div>
+            <div class="color-swatch__hex">#8C7B72</div>
+            <div class="color-swatch__role">설명 · 보조 텍스트</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#7A5E4E;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Badge</div>
+            <div class="color-swatch__hex">#7A5E4E</div>
+            <div class="color-swatch__role">배지 텍스트</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="color-section-label">Semantic Colors</div>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#6B8F71;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Success</div>
+            <div class="color-swatch__hex">#6B8F71</div>
+            <div class="color-swatch__role">성공 · 완료</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#B85C5C;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Error</div>
+            <div class="color-swatch__hex">#B85C5C</div>
+            <div class="color-swatch__role">오류 · 경고</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__block" style="background:#C4924A;"></div>
+          <div class="color-swatch__info">
+            <div class="color-swatch__name">Warning</div>
+            <div class="color-swatch__hex">#C4924A</div>
+            <div class="color-swatch__role">주의 · 알림</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Typography -->
+  <section class="ds-section" id="typography">
+    <div class="ds-section__header">
+      <div class="ds-section__num">2</div>
+      <div class="ds-section__title">Typography</div>
+    </div>
+    <div class="ds-section__body">
+
+      <div style="display:flex; gap:var(--space-xl); flex-wrap:wrap; margin-bottom:var(--space-xl); padding:var(--space-lg); background:var(--color-bg); border-radius:var(--radius-md); border:1px solid var(--color-border);">
+        <div>
+          <div class="color-section-label" style="margin:0 0 6px;">Heading Font</div>
+          <div style="font-family:var(--font-heading); font-size:1.5rem; color:var(--color-text-title);">본명조 (Noto Serif KR)</div>
+          <div style="font-size:var(--fs-desc); color:var(--color-text-desc); margin-top:4px;">제목 · 브랜드명 · 강조 헤드라인</div>
+        </div>
+        <div>
+          <div class="color-section-label" style="margin:0 0 6px;">Body Font</div>
+          <div style="font-family:var(--font-body); font-size:1.5rem; color:var(--color-text-title);">프리텐다드 (Pretendard)</div>
+          <div style="font-size:var(--fs-desc); color:var(--color-text-desc); margin-top:4px;">본문 · UI · 버튼 · 배지</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta__label">Title</div>
+          <div class="type-meta__spec">
+            Font: 본명조<br>
+            Desktop: 40px / 2.5rem<br>
+            Mobile: 28px / 1.75rem<br>
+            Weight: 400<br>
+            Line-height: 1.4<br>
+            Letter-spacing: -0.01em
+          </div>
+        </div>
+        <div class="type-preview">
+          <div class="type-title">Perléa — 자기다운 도자기</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta__label">H1 — 섹션 제목</div>
+          <div class="type-meta__spec">
+            Font: 본명조<br>
+            Desktop: 32px / 2rem<br>
+            Mobile: 22px / 1.375rem<br>
+            Weight: 400<br>
+            Line-height: 1.4
+          </div>
+        </div>
+        <div class="type-preview">
+          <div class="type-h1">진심의 가치를 담은 도자기</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta__label">H2 — 서브 제목</div>
+          <div class="type-meta__spec">
+            Font: 본명조<br>
+            Desktop: 24px / 1.5rem<br>
+            Mobile: 18px / 1.125rem<br>
+            Weight: 500<br>
+            Line-height: 1.4
+          </div>
+        </div>
+        <div class="type-preview">
+          <div class="type-h2">새로운 제품 라인을 소개합니다</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta__label">Emphasis — 강조</div>
+          <div class="type-meta__spec">
+            Font: 프리텐다드<br>
+            Desktop: 18px / 1.125rem<br>
+            Mobile: 15px / 0.9375rem<br>
+            Weight: 600<br>
+            Line-height: 1.5
+          </div>
+        </div>
+        <div class="type-preview">
+          <div class="type-emphasis">도자기를 통해 자기 지향적 삶을 제안합니다.</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta__label">Body — 본문</div>
+          <div class="type-meta__spec">
+            Font: 프리텐다드<br>
+            Desktop: 16px / 1rem<br>
+            Mobile: 15px / 0.9375rem<br>
+            Weight: 400<br>
+            Line-height: 1.75
+          </div>
+        </div>
+        <div class="type-preview">
+          <div class="type-body">자기다움, 깨끗함, 진심의 가치를 담은 도자기를 만들며 일상의 아름다움을 전합니다. 매 순간을 특별하게 만드는 Perléa의 도자기와 함께하세요.</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta__label">Description — 설명</div>
+          <div class="type-meta__spec">
+            Font: 프리텐다드<br>
+            Desktop: 14px / 0.875rem<br>
+            Mobile: 13px / 0.8125rem<br>
+            Weight: 400<br>
+            Line-height: 1.6
+          </div>
+        </div>
+        <div class="type-preview">
+          <div class="type-desc">배송은 주문 후 2–3 영업일 이내에 출발합니다. 제품 특성상 교환 및 환불은 수령 후 7일 이내에 가능합니다.</div>
+        </div>
+      </div>
+
+      <div class="type-row">
+        <div class="type-meta">
+          <div class="type-meta__label">Badge — 배지</div>
+          <div class="type-meta__spec">
+            Font: 프리텐다드<br>
+            Size: 12px / 0.75rem<br>
+            Weight: 600<br>
+            Letter-spacing: 0.08em<br>
+            Text-transform: uppercase
+          </div>
+        </div>
+        <div class="type-preview">
+          <div class="type-badge-text">NEW ARRIVAL · BEST SELLER · LIMITED</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. Badges -->
+  <section class="ds-section" id="badges">
+    <div class="ds-section__header">
+      <div class="ds-section__num">3</div>
+      <div class="ds-section__title">Badges</div>
+    </div>
+    <div class="ds-section__body">
+      <div class="badge-row" style="margin-bottom:var(--space-lg);">
+        <span class="badge badge--primary">New Arrival</span>
+        <span class="badge badge--secondary">Best Seller</span>
+        <span class="badge badge--accent">Limited</span>
+        <span class="badge badge--outline">Handmade</span>
+        <span class="badge badge--success">In Stock</span>
+        <span class="badge badge--error">Sold Out</span>
+        <span class="badge badge--warning">Last 3</span>
+      </div>
+      <div style="font-size:var(--fs-desc); color:var(--color-text-desc);">
+        배지는 항상 <strong>Pretendard 600</strong>, 12px, letter-spacing 0.08em, uppercase 적용. 높이는 최소 22px 이상 유지.
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Buttons -->
+  <section class="ds-section" id="buttons">
+    <div class="ds-section__header">
+      <div class="ds-section__num">4</div>
+      <div class="ds-section__title">Buttons</div>
+    </div>
+    <div class="ds-section__body">
+      <div class="btn-grid">
+
+        <div>
+          <div class="btn-row-label">Variants</div>
+          <div class="btn-row">
+            <button class="btn btn--primary btn--md">Primary</button>
+            <button class="btn btn--secondary btn--md">Secondary</button>
+            <button class="btn btn--accent btn--md">Accent</button>
+            <button class="btn btn--outline btn--md">Outline</button>
+            <button class="btn btn--outline-secondary btn--md">Outline Secondary</button>
+            <button class="btn btn--ghost btn--md">Ghost</button>
+            <button class="btn btn--text btn--md">Text →</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="btn-row-label">Sizes</div>
+          <div class="btn-row">
+            <button class="btn btn--primary btn--lg">Large (48px)</button>
+            <button class="btn btn--primary btn--md">Medium (42px)</button>
+            <button class="btn btn--primary btn--sm">Small (34px)</button>
+            <button class="btn btn--primary btn--xs">XSmall (26px)</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="btn-row-label">Rounded Variant</div>
+          <div class="btn-row">
+            <button class="btn btn--primary btn--md btn--rounded">구매하기</button>
+            <button class="btn btn--secondary btn--md btn--rounded">장바구니</button>
+            <button class="btn btn--outline btn--md btn--rounded">자세히 보기</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="btn-row-label">States</div>
+          <div class="btn-row">
+            <button class="btn btn--primary btn--md">Active</button>
+            <button class="btn btn--primary btn--md btn--disabled">Disabled</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="btn-row-label">Full Width (Mobile)</div>
+          <div style="max-width:375px;">
+            <button class="btn btn--primary btn--lg btn--full" style="margin-bottom:10px;">구매하기</button>
+            <button class="btn btn--outline btn--lg btn--full">장바구니에 담기</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Spacing -->
+  <section class="ds-section" id="spacing">
+    <div class="ds-section__header">
+      <div class="ds-section__num">5</div>
+      <div class="ds-section__title">Spacing Scale</div>
+    </div>
+    <div class="ds-section__body">
+      <div class="spacing-grid">
+        <div class="spacing-row"><div class="spacing-name">xs</div><div class="spacing-block" style="width:4px;"></div><div class="spacing-label">4px / 0.25rem</div></div>
+        <div class="spacing-row"><div class="spacing-name">sm</div><div class="spacing-block" style="width:8px;"></div><div class="spacing-label">8px / 0.5rem</div></div>
+        <div class="spacing-row"><div class="spacing-name">md</div><div class="spacing-block" style="width:16px;"></div><div class="spacing-label">16px / 1rem</div></div>
+        <div class="spacing-row"><div class="spacing-name">lg</div><div class="spacing-block" style="width:24px;"></div><div class="spacing-label">24px / 1.5rem</div></div>
+        <div class="spacing-row"><div class="spacing-name">xl</div><div class="spacing-block" style="width:40px;"></div><div class="spacing-label">40px / 2.5rem</div></div>
+        <div class="spacing-row"><div class="spacing-name">2xl</div><div class="spacing-block" style="width:64px;"></div><div class="spacing-label">64px / 4rem</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Mobile -->
+  <section class="ds-section" id="mobile">
+    <div class="ds-section__header">
+      <div class="ds-section__num">6</div>
+      <div class="ds-section__title">Mobile Typography Scale</div>
+    </div>
+    <div class="ds-section__body">
+      <div class="mobile-preview-wrap">
+
+        <div class="mobile-frame">
+          <div class="mobile-frame__bar">
+            <div class="mobile-frame__notch"></div>
+          </div>
+          <div class="mobile-frame__content">
+            <div style="margin-bottom:6px;"><span class="badge badge--accent">New Arrival</span></div>
+            <div class="mobile-type-title" style="margin-bottom:8px;">Perléa</div>
+            <div class="mobile-type-h1" style="margin-bottom:6px;">자기다운 도자기</div>
+            <div class="mobile-type-h2" style="margin-bottom:12px;">새로운 제품 라인</div>
+            <div class="mobile-type-emphasis" style="margin-bottom:8px;">진심의 가치를 담은 도자기</div>
+            <div class="mobile-type-body" style="margin-bottom:8px;">자기다움, 깨끗함, 진심의 가치를 담은 도자기를 만들며 일상의 아름다움을 전합니다.</div>
+            <div class="mobile-type-desc" style="margin-bottom:20px;">배송 2–3 영업일 · 무료배송 50,000원 이상</div>
+            <button class="btn btn--primary btn--lg btn--full btn--rounded" style="margin-bottom:10px;">구매하기</button>
+            <button class="btn btn--outline btn--lg btn--full btn--rounded">장바구니에 담기</button>
+          </div>
+        </div>
+
+        <div class="mobile-spec-table">
+          <table class="spec-table">
+            <thead>
+              <tr>
+                <th>요소</th>
+                <th>Desktop</th>
+                <th>Mobile</th>
+                <th>Font</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Title</td><td>40px</td><td>28px</td><td>본명조 400</td></tr>
+              <tr><td>H1</td><td>32px</td><td>22px</td><td>본명조 400</td></tr>
+              <tr><td>H2</td><td>24px</td><td>18px</td><td>본명조 500</td></tr>
+              <tr><td>Emphasis</td><td>18px</td><td>15px</td><td>Pretendard 600</td></tr>
+              <tr><td>Body</td><td>16px</td><td>15px</td><td>Pretendard 400</td></tr>
+              <tr><td>Description</td><td>14px</td><td>13px</td><td>Pretendard 400</td></tr>
+              <tr><td>Badge</td><td>12px</td><td>12px</td><td>Pretendard 600</td></tr>
+              <tr><td>Button LG</td><td>16px · h48</td><td>16px · h48</td><td>Pretendard 500</td></tr>
+              <tr><td>Button MD</td><td>15px · h42</td><td>15px · h42</td><td>Pretendard 500</td></tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top:var(--space-xl);">
+            <div class="color-section-label">Breakpoints</div>
+            <table class="spec-table">
+              <thead>
+                <tr><th>Name</th><th>Width</th><th>적용</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Mobile</td><td>~ 767px</td><td>모바일 스케일 적용</td></tr>
+                <tr><td>Tablet</td><td>768 ~ 1023px</td><td>중간 스케일</td></tr>
+                <tr><td>Desktop</td><td>1024px ~</td><td>데스크탑 스케일</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="text-align:center; padding:var(--space-xl); color:var(--color-text-desc); font-size:var(--fs-desc); border-top:1px solid var(--color-border); margin-top:var(--space-xl);">
+  Perléa Design System v1.0 &nbsp;·&nbsp; 본명조 + Pretendard &nbsp;·&nbsp; Letter-spacing -0.01em
+</footer>
+
+</body>
+</html>
