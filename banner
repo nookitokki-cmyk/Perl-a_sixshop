@@ -1,0 +1,410 @@
+<style>
+/* ===== 풀스크린 슬라이더 컨테이너 ===== */
+.bm-fs-slider {
+  position: relative;
+  width: 100%;
+  height: {{property.desktopHeight}}vh;
+  overflow: hidden;
+  font-family: var(--font-family-body);
+}
+
+.bm-fs-slider__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== 슬라이드 아이템 ===== */
+.bm-fs-slider__item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity {{property.transitionDuration}}ms ease-in-out;
+  z-index: 1;
+}
+
+.bm-fs-slider__item.active {
+  opacity: 1;
+  z-index: 2;
+}
+
+/* ===== 미디어 ===== */
+.bm-fs-slider__media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== 오버레이 ===== */
+.bm-fs-slider__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* ===== 콘텐츠 ===== */
+.bm-fs-slider__content {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  padding: 40px;
+  max-width: 1200px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== 슬라이드별 콘텐츠 위치·정렬·색상 ===== */
+{{#each property.slides}}
+.bm-fs-slider__content--{{@index}} {
+  color: {{textColor}};
+  text-align: {{textAlign}};
+
+  {{#if (eq contentPosition "left")}}
+  left: 0;
+  align-items: flex-start;
+  {{/if}}
+  {{#if (eq contentPosition "center")}}
+  left: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  {{/if}}
+  {{#if (eq contentPosition "right")}}
+  right: 0;
+  align-items: flex-end;
+  {{/if}}
+}
+
+.bm-fs-slider__overlay--{{@index}} {
+  background-color: {{overlayColor}};
+  opacity: {{divide overlayOpacity 100}};
+}
+
+.bm-fs-slider__btn--{{@index}} {
+  display: inline-block;
+  padding: 12px 32px;
+  background-color: {{buttonBgColor}};
+  color: {{buttonTextColor}};
+  border: none;
+  border-radius: {{buttonBorderRadius}}px;
+  font-size: {{btnPcSize}}px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.bm-fs-slider__btn--{{@index}}:hover {
+  background-color: {{buttonHoverBgColor}};
+  color: {{buttonHoverTextColor}};
+}
+{{/each}}
+
+/* ===== 타이틀 (RICH_TEXT) ===== */
+.bm-fs-slider__title {
+  font-family: var(--font-family-heading);
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.bm-fs-slider__title h1,
+.bm-fs-slider__title h2,
+.bm-fs-slider__title h3,
+.bm-fs-slider__title h4,
+.bm-fs-slider__title h5,
+.bm-fs-slider__title h6 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.bm-fs-slider__title h1 { font-size: 48px; }
+.bm-fs-slider__title h2 { font-size: 40px; }
+.bm-fs-slider__title h3 { font-size: 32px; }
+
+.bm-fs-slider__title p { margin: 0; }
+.bm-fs-slider__title strong { font-weight: 700; }
+.bm-fs-slider__title em,
+.bm-fs-slider__title i { font-style: italic; }
+
+/* ===== 설명 (RICH_TEXT) ===== */
+.bm-fs-slider__desc {
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+  font-size: 18px;
+}
+
+.bm-fs-slider__desc p { margin: 0 0 12px 0; }
+.bm-fs-slider__desc p:last-child { margin-bottom: 0; }
+.bm-fs-slider__desc strong { font-weight: 700; }
+.bm-fs-slider__desc em,
+.bm-fs-slider__desc i { font-style: italic; }
+
+/* ===== 인디케이터 ===== */
+.bm-fs-slider__indicators {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.bm-fs-slider__indicator {
+  width: 60px;
+  height: {{property.indicatorHeight}}px;
+  background-color: {{property.indicatorColor}};
+  opacity: {{divide property.indicatorOpacity 100}};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+}
+
+.bm-fs-slider__indicator.active {
+  background-color: {{property.indicatorActiveColor}};
+  opacity: 1;
+}
+
+.bm-fs-slider__indicator:hover {
+  opacity: {{divide (add property.indicatorOpacity 20) 100}};
+}
+
+/* ===== 모바일 반응형 ===== */
+@media (max-width: 768px) {
+  .bm-fs-slider {
+    height: {{property.mobileHeight}}vh;
+  }
+
+  .bm-fs-slider__content {
+    padding: 20px;
+  }
+
+  .bm-fs-slider__title h1 { font-size: 32px; }
+  .bm-fs-slider__title h2 { font-size: 28px; }
+  .bm-fs-slider__title h3 { font-size: 24px; }
+
+  .bm-fs-slider__desc {
+    font-size: 16px;
+  }
+
+  {{#each property.slides}}
+  .bm-fs-slider__btn--{{@index}} {
+    padding: 10px 24px;
+    font-size: {{btnMoSize}}px;
+  }
+  {{/each}}
+
+  .bm-fs-slider__indicator {
+    width: 40px;
+  }
+
+  .bm-fs-slider__indicators {
+    bottom: 20px;
+    gap: 8px;
+  }
+}
+</style>
+
+<template>
+  <div class="bm-fs-slider">
+    <div class="bm-fs-slider__track">
+      {{#each property.slides}}
+      <div class="bm-fs-slider__item" data-slide-index="{{@index}}">
+
+        {{!-- 미디어 --}}
+        {{#if (eq mediaType "image")}}
+          {{#if image}}
+          <img src="{{image}}" alt="Slide {{add @index 1}}" class="bm-fs-slider__media">
+          {{/if}}
+        {{else}}
+          {{#if video}}
+          <video src="{{video}}" class="bm-fs-slider__media" autoplay loop muted playsinline></video>
+          {{/if}}
+        {{/if}}
+
+        {{!-- 오버레이 --}}
+        {{#if (eq useOverlay "on")}}
+        <div class="bm-fs-slider__overlay bm-fs-slider__overlay--{{@index}}"></div>
+        {{/if}}
+
+        {{!-- 콘텐츠 --}}
+        {{#if (eq showContent "on")}}
+        <div class="bm-fs-slider__content bm-fs-slider__content--{{@index}}">
+          <div class="bm-fs-slider__title">
+            {{{title}}}
+          </div>
+          <div class="bm-fs-slider__desc">
+            {{{description}}}
+          </div>
+
+          {{!-- 버튼 --}}
+          {{#if (eq showButton "on")}}
+            {{#if openInNewTab}}
+            <a href="{{buttonLink.value}}" target="_blank" rel="noopener noreferrer" class="bm-fs-slider__btn--{{@index}}">
+              {{buttonText}}
+            </a>
+            {{else}}
+            <a href="{{buttonLink.value}}" class="bm-fs-slider__btn--{{@index}}">
+              {{buttonText}}
+            </a>
+            {{/if}}
+          {{/if}}
+        </div>
+        {{/if}}
+
+      </div>
+      {{/each}}
+    </div>
+
+    {{!-- 인디케이터 --}}
+    <div class="bm-fs-slider__indicators">
+      {{#each property.slides}}
+      <button class="bm-fs-slider__indicator" data-indicator-index="{{@index}}" aria-label="Slide {{add @index 1}}"></button>
+      {{/each}}
+    </div>
+  </div>
+</template>
+
+<script>
+var container = bm.container;
+var context = bm.context;
+
+var currentSlide = 0;
+var autoplayTimer = null;
+var isTransitioning = false;
+
+/* ===== 초기화 ===== */
+function initSlider() {
+  var slides = container.querySelectorAll('.bm-fs-slider__item');
+  var indicators = container.querySelectorAll('.bm-fs-slider__indicator');
+
+  if (slides.length === 0) return;
+
+  slides[0].classList.add('active');
+  if (indicators[0]) {
+    indicators[0].classList.add('active');
+  }
+
+  if (context.property.autoplay) {
+    startAutoplay();
+  }
+}
+
+/* ===== 슬라이드 이동 ===== */
+function goToSlide(index) {
+  if (isTransitioning) return;
+
+  var slides = container.querySelectorAll('.bm-fs-slider__item');
+  var indicators = container.querySelectorAll('.bm-fs-slider__indicator');
+
+  if (index < 0 || index >= slides.length) return;
+  if (index === currentSlide) return;
+
+  isTransitioning = true;
+
+  slides[currentSlide].classList.remove('active');
+  if (indicators[currentSlide]) {
+    indicators[currentSlide].classList.remove('active');
+  }
+
+  currentSlide = index;
+  slides[currentSlide].classList.add('active');
+  if (indicators[currentSlide]) {
+    indicators[currentSlide].classList.add('active');
+  }
+
+  setTimeout(function() {
+    isTransitioning = false;
+  }, context.property.transitionDuration);
+
+  if (context.property.autoplay) {
+    stopAutoplay();
+    startAutoplay();
+  }
+}
+
+function nextSlide() {
+  var slides = container.querySelectorAll('.bm-fs-slider__item');
+  var nextIndex = (currentSlide + 1) % slides.length;
+  goToSlide(nextIndex);
+}
+
+/* ===== 자동 재생 ===== */
+function startAutoplay() {
+  stopAutoplay();
+  autoplayTimer = setInterval(function() {
+    nextSlide();
+  }, context.property.autoplayInterval);
+}
+
+function stopAutoplay() {
+  if (autoplayTimer) {
+    clearInterval(autoplayTimer);
+    autoplayTimer = null;
+  }
+}
+
+/* ===== 이벤트 핸들러 ===== */
+function handleClick(event) {
+  var indicator = event.target.closest('.bm-fs-slider__indicator');
+  if (!indicator) return;
+
+  event.preventDefault();
+  var index = parseInt(indicator.getAttribute('data-indicator-index'), 10);
+  if (!isNaN(index)) {
+    goToSlide(index);
+  }
+}
+
+container.addEventListener('click', handleClick, true);
+
+/* ===== 초기 실행 ===== */
+initSlider();
+
+/* ===== 설정 변경 시 재초기화 ===== */
+bm.onContextChange = function() {
+  stopAutoplay();
+  currentSlide = 0;
+  isTransitioning = false;
+
+  var slides = container.querySelectorAll('.bm-fs-slider__item');
+  var indicators = container.querySelectorAll('.bm-fs-slider__indicator');
+
+  slides.forEach(function(slide, i) {
+    slide.classList.remove('active');
+    if (i === 0) slide.classList.add('active');
+  });
+
+  indicators.forEach(function(ind, i) {
+    ind.classList.remove('active');
+    if (i === 0) ind.classList.add('active');
+  });
+
+  if (context.property.autoplay) {
+    startAutoplay();
+  }
+};
+
+/* ===== 정리 ===== */
+bm.onDestroy = function() {
+  stopAutoplay();
+  container.removeEventListener('click', handleClick, true);
+};
+</script>
+
+
+{"settings":[{"type":"TITLE","content":"누끼토끼 전문 개발 블록"},{"type":"DESCRIPTION","content":"【 안내 】\n코드 없이 직접 운영하실 수 있도록\n전문 개발자가 기획·설계·구현했습니다.\n간단한 수정은 블록 AI를 활용하시고,\n고도화된 커스텀이 필요하시면\n전문가에게 의뢰해 주세요."},{"type":"TITLE","content":"📋 슬라이드 목록"},{"type":"LIST","id":"slides","label":"슬라이드","maxCount":10,"settings":[{"type":"SELECT","id":"mediaType","label":"미디어 타입","options":[{"value":"image","label":"이미지"},{"value":"video","label":"비디오"}],"default":"image"},{"type":"IMAGE_PICKER","id":"image","label":"이미지","isVisible":"property.slides[index].mediaType === 'image'"},{"type":"VIDEO_PICKER","id":"video","label":"비디오","isVisible":"property.slides[index].mediaType === 'video'"},{"id":"showContent","label":"콘텐츠 표시","default":"on","type":"RADIO","options":[{"value":"on","label":"사용","icon":""},{"value":"off","label":"미사용","icon":""}]},{"type":"RICH_TEXT","id":"title","label":"제목","default":"<h1>슬라이드 제목</h1>","isVisible":"property.slides[index].showContent === 'on'"},{"type":"RICH_TEXT","id":"description","label":"설명","default":"<p>슬라이드 설명 텍스트</p>","isVisible":"property.slides[index].showContent === 'on'"},{"id":"contentPosition","label":"콘텐츠 위치","default":"center","isVisible":"property.slides[index].showContent === 'on'","type":"RADIO","options":[{"value":"left","label":"","icon":"locationLeftMiddle"},{"value":"center","label":"","icon":"locationCenterMiddle"},{"value":"right","label":"","icon":"locationRightMiddle"}]},{"id":"textAlign","label":"텍스트 정렬","default":"center","isVisible":"property.slides[index].showContent === 'on'","type":"RADIO","options":[{"value":"left","label":"","icon":"textAlignmentLeft"},{"value":"center","label":"","icon":"textAlignmentCenter"},{"value":"right","label":"","icon":"textAlignmentRight"}]},{"type":"COLOR_PICKER","id":"textColor","label":"텍스트 색상","default":"#FAF8F5","isVisible":"property.slides[index].showContent === 'on'"},{"id":"useOverlay","label":"오버레이","default":"on","type":"RADIO","options":[{"value":"on","label":"사용","icon":""},{"value":"off","label":"미사용","icon":""}]},{"type":"COLOR_PICKER","id":"overlayColor","label":"↳ 오버레이 색상","default":"#3B2E2A","isVisible":"property.slides[index].useOverlay === 'on'"},{"type":"RANGE","id":"overlayOpacity","label":"↳ 오버레이 투명도","min":0,"max":100,"step":5,"unit":"%","default":30,"isVisible":"property.slides[index].useOverlay === 'on'"},{"id":"showButton","label":"버튼","default":"off","isVisible":"property.slides[index].showContent === 'on'","type":"RADIO","options":[{"value":"on","label":"사용","icon":""},{"value":"off","label":"미사용","icon":""}]},{"type":"TEXT","id":"buttonText","label":"↳ 버튼 텍스트","default":"자세히 보기","isVisible":"property.slides[index].showButton === 'on'"},{"type":"LINK","id":"buttonLink","label":"↳ 버튼 링크","isVisible":"property.slides[index].showButton === 'on'"},{"type":"CHECKBOX","id":"openInNewTab","label":"↳ 새 탭에서 열기","default":false,"isVisible":"property.slides[index].showButton === 'on'"},{"type":"COLOR_PICKER","id":"buttonBgColor","label":"↳ 버튼 배경색","default":"#FAF8F5","isVisible":"property.slides[index].showButton === 'on'"},{"type":"COLOR_PICKER","id":"buttonTextColor","label":"↳ 버튼 텍스트 색상","default":"#3B2E2A","isVisible":"property.slides[index].showButton === 'on'"},{"type":"COLOR_PICKER","id":"buttonHoverBgColor","label":"↳ 버튼 호버 배경색","default":"#EDE3D8","isVisible":"property.slides[index].showButton === 'on'"},{"type":"COLOR_PICKER","id":"buttonHoverTextColor","label":"↳ 버튼 호버 텍스트 색상","default":"#3B2E2A","isVisible":"property.slides[index].showButton === 'on'"},{"type":"RANGE","id":"buttonBorderRadius","label":"↳ 버튼 모서리 둥글기","min":0,"max":100,"step":1,"unit":"px","default":8,"isVisible":"property.slides[index].showButton === 'on'"},{"type":"RANGE","id":"btnPcSize","label":"↳ 버튼 PC 글씨 크기","min":12,"max":24,"step":1,"unit":"px","default":15,"isVisible":"property.slides[index].showButton === 'on'"},{"type":"RANGE","id":"btnMoSize","label":"↳ 버튼 모바일 글씨 크기","min":12,"max":20,"step":1,"unit":"px","default":14,"isVisible":"property.slides[index].showButton === 'on'"}]},{"type":"TITLE","content":"🎬 슬라이드 설정"},{"type":"CHECKBOX","id":"autoplay","label":"자동 재생","default":true},{"type":"RANGE","id":"autoplayInterval","label":"↳ 자동 재생 간격","min":1000,"max":10000,"step":500,"unit":"ms","default":4000,"isVisible":"property.autoplay == true"},{"type":"RANGE","id":"transitionDuration","label":"전환 속도","min":300,"max":2000,"step":100,"unit":"ms","default":800},{"type":"TITLE","content":"📐 레이아웃"},{"type":"RANGE","id":"desktopHeight","label":"데스크톱 높이","min":50,"max":100,"step":5,"unit":"vh","default":100},{"type":"RANGE","id":"mobileHeight","label":"모바일 높이","min":50,"max":100,"step":5,"unit":"vh","default":100},{"type":"TITLE","content":"⚙️ 인디케이터"},{"type":"COLOR_PICKER","id":"indicatorColor","label":"인디케이터 색상","default":"#FAF8F5"},{"type":"RANGE","id":"indicatorOpacity","label":"↳ 인디케이터 투명도","min":0,"max":100,"step":5,"unit":"%","default":40},{"type":"COLOR_PICKER","id":"indicatorActiveColor","label":"활성 인디케이터 색상","default":"#FAF8F5"},{"type":"RANGE","id":"indicatorHeight","label":"인디케이터 두께","min":2,"max":8,"step":1,"unit":"px","default":3}],"property":{"autoplay":true,"autoplayInterval":4000,"transitionDuration":800,"desktopHeight":100,"mobileHeight":100,"indicatorColor":"#FAF8F5","indicatorOpacity":40,"indicatorActiveColor":"#FAF8F5","indicatorHeight":3,"slides":[{"mediaType":"image","image":"","video":"","showContent":"on","title":"<h1>진심의 가치를 담은 도자기</h1>","description":"<p>자기다움, 깨끗함, 진심의 가치를 담은 도자기를 만들며<br>일상의 아름다움을 전합니다.</p>","contentPosition":"center","textAlign":"center","textColor":"#FAF8F5","useOverlay":"on","overlayColor":"#3B2E2A","overlayOpacity":30,"showButton":"off","buttonText":"자세히 보기","buttonLink":{"type":"url","label":"/","value":"/"},"openInNewTab":false,"buttonBgColor":"#FAF8F5","buttonTextColor":"#3B2E2A","buttonHoverBgColor":"#EDE3D8","buttonHoverTextColor":"#3B2E2A","buttonBorderRadius":8,"btnPcSize":15,"btnMoSize":14},{"mediaType":"image","image":"","video":"","showContent":"on","title":"<h1>새로운 제품 라인을 소개합니다</h1>","description":"<p>매 순간을 특별하게 만드는<br>Perléa의 도자기와 함께하세요.</p>","contentPosition":"center","textAlign":"center","textColor":"#FAF8F5","useOverlay":"on","overlayColor":"#3B2E2A","overlayOpacity":30,"showButton":"off","buttonText":"컬렉션 보기","buttonLink":{"type":"url","label":"/","value":"/"},"openInNewTab":false,"buttonBgColor":"#FAF8F5","buttonTextColor":"#3B2E2A","buttonHoverBgColor":"#EDE3D8","buttonHoverTextColor":"#3B2E2A","buttonBorderRadius":8,"btnPcSize":15,"btnMoSize":14},{"mediaType":"image","image":"","video":"","showContent":"on","title":"<h1>자기다운 도자기, Perléa</h1>","description":"<p>도자기를 통해 자기 지향적 삶을 제안합니다.</p>","contentPosition":"center","textAlign":"center","textColor":"#FAF8F5","useOverlay":"on","overlayColor":"#3B2E2A","overlayOpacity":30,"showButton":"off","buttonText":"지금 시작하기","buttonLink":{"type":"url","label":"/","value":"/"},"openInNewTab":false,"buttonBgColor":"#FAF8F5","buttonTextColor":"#3B2E2A","buttonHoverBgColor":"#EDE3D8","buttonHoverTextColor":"#3B2E2A","buttonBorderRadius":8,"btnPcSize":15,"btnMoSize":14}]}}
