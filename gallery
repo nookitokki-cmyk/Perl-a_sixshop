@@ -1,0 +1,979 @@
+<style>
+/* ===== 포트폴리오 갤러리 블록 — Perléa ===== */
+
+/* ===== 섹션 루트 ===== */
+.bm-pf {
+  font-family: var(--font-family-body);
+  background-color: {{property.backgroundColor}};
+  padding: {{property.sectionPaddingTop}}px 0 {{property.sectionPaddingBottom}}px 0;
+}
+
+/* ===== 컨테이너 ===== */
+.bm-pf__container {
+  max-width: {{property.containerMaxWidth}}px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== 행 레이아웃 ===== */
+.bm-pf__row {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  {{#if (eq property.layoutDirection "gallery-text")}}
+  flex-direction: row-reverse;
+  {{/if}}
+}
+
+/* ===== 좌측 텍스트 영역 ===== */
+.bm-pf__col-text {
+  flex: 0 0 {{property.leftColumnWidth}}%;
+  max-width: {{property.leftColumnWidth}}%;
+}
+
+.bm-pf__content {
+  {{#if (eq property.layoutDirection "text-gallery")}}
+  padding-right: 24px;
+  {{else}}
+  padding-left: 24px;
+  {{/if}}
+}
+
+/* ===== 강조 배지 ===== */
+.bm-pf__badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: {{property.highlightTitleBgColor}};
+  font-size: {{property.badgePcSize}}px;
+  padding: 4px 14px;
+  border-radius: {{property.highlightTitleBorderRadius}}px;
+  margin-bottom: {{property.badgeTitleGap}}px;
+  text-transform: uppercase;
+}
+.bm-pf__badge p { margin: 0; line-height: 1.2; }
+.bm-pf__badge strong { font-weight: 700; }
+.bm-pf__badge em, .bm-pf__badge i { font-style: italic; }
+
+/* ===== 제목 ===== */
+.bm-pf__title {
+  font-family: var(--font-family-heading);
+  font-size: {{property.titlePcSize}}px;
+  margin-bottom: {{property.titleDescGap}}px;
+  line-height: 1.4;
+}
+.bm-pf__title p { margin: 0; }
+.bm-pf__title strong { font-weight: 700; }
+.bm-pf__title em, .bm-pf__title i { font-style: italic; }
+
+/* ===== 설명 ===== */
+.bm-pf__desc {
+  margin-bottom: {{property.descControlsGap}}px;
+}
+.bm-pf__desc p {
+  font-size: {{property.descPcSize}}px;
+  line-height: 1.75;
+  margin: 0;
+}
+.bm-pf__desc strong { font-weight: 700; }
+.bm-pf__desc em, .bm-pf__desc i { font-style: italic; }
+
+/* ===== 갤러리 컨트롤 ===== */
+.bm-pf__controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  color: {{property.controlColor}};
+  margin-bottom: {{property.controlsBtnGap}}px;
+}
+
+.bm-pf__ctrl-btn {
+  background: none;
+  border: none;
+  color: {{property.controlColor}};
+  cursor: pointer;
+  padding: 6px;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+  line-height: 1;
+  min-width: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+.bm-pf__ctrl-btn:hover {
+  opacity: 0.6;
+  background-color: rgba(59, 46, 42, 0.06);
+}
+.bm-pf__ctrl-btn:active {
+  opacity: 0.4;
+  transform: scale(0.96);
+}
+.bm-pf__ctrl-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: currentColor;
+}
+
+/* ===== 프로그레스 바 ===== */
+.bm-pf__progress {
+  margin: 0 6px;
+  width: 80px;
+}
+.bm-pf__progress-bg {
+  width: 100%;
+  background-color: rgba(59, 46, 42, 0.15);
+  height: 2px;
+  position: relative;
+  border-radius: 1px;
+}
+.bm-pf__progress-fill {
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+  background-color: {{property.progressBarColor}};
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 1px;
+}
+
+/* ===== 슬라이드 카운터 ===== */
+.bm-pf__counter {
+  margin: 0 6px;
+  font-size: 12px;
+  color: {{property.controlColor}};
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== CTA 버튼 영역 ===== */
+.bm-pf__cta-wrap {
+  display: flex;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+.bm-pf__cta,
+.bm-pf__cta--secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: {{property.btnPcSize}}px;
+  padding: {{property.btnPaddingV}}px {{property.btnPaddingH}}px;
+  border-radius: {{property.btnBorderRadius}}px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+  line-height: 1;
+}
+.bm-pf__cta {
+  color: {{property.ctaTextColor}};
+  background-color: {{property.ctaBgColor}};
+  border: {{property.btnBorderWidth}}px solid {{property.ctaBorderColor}};
+}
+.bm-pf__cta:hover {
+  color: {{property.ctaHoverTextColor}};
+  background-color: {{property.ctaHoverBgColor}};
+  border-color: {{property.ctaHoverBorderColor}};
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(59, 46, 42, 0.10);
+}
+.bm-pf__cta--secondary {
+  color: {{property.cta2TextColor}};
+  background-color: {{property.cta2BgColor}};
+  border: {{property.btnBorderWidth}}px solid {{property.cta2BorderColor}};
+}
+.bm-pf__cta--secondary:hover {
+  color: {{property.cta2HoverTextColor}};
+  background-color: {{property.cta2HoverBgColor}};
+  border-color: {{property.cta2HoverBorderColor}};
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(59, 46, 42, 0.10);
+}
+
+/* ===== 우측 갤러리 영역 ===== */
+.bm-pf__col-gallery {
+  flex: 0 0 calc(100% - {{property.leftColumnWidth}}%);
+  max-width: calc(100% - {{property.leftColumnWidth}}%);
+  overflow: hidden;
+}
+.bm-pf__gallery-wrap {
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y pinch-zoom;
+}
+.bm-pf__gallery-track {
+  display: flex;
+  gap: 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.bm-pf__gallery-track.bm-pf--no-transition { transition: none; }
+.bm-pf__gallery-track.bm-pf--dragging { cursor: grabbing; transition: none; }
+
+/* ===== 갤러리 아이템 — JS에서 width 제어 ===== */
+.bm-pf__item {
+  flex: none;
+  position: relative;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+/* ===== 아이템 내부 래퍼 (gap 역할) ===== */
+.bm-pf__item-inner {
+  padding-right: 16px;
+}
+
+/* ===== 이미지 래퍼 ===== */
+.bm-pf__img-wrap {
+  width: 100%;
+  {{#if (eq property.imageAspectRatio "custom")}}
+  height: {{property.customImageHeight}}px;
+  {{else}}
+  aspect-ratio: {{property.imageAspectRatio}};
+  {{/if}}
+  background-color: #F0EBE5;
+  overflow: hidden;
+  position: relative;
+  border-radius: {{property.imageBorderRadius}}px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.bm-pf__img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  background-color: #F0EBE5;
+}
+.bm-pf__img-wrap:hover img {
+  transform: scale(1.04);
+}
+
+/* ===== 이미지 플레이스홀더 ===== */
+.bm-pf__placeholder {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: #F0EBE5;
+  border: 1px dashed #E8E0D5;
+  border-radius: {{property.imageBorderRadius}}px;
+}
+.bm-pf__placeholder svg {
+  width: 40px; height: 40px;
+  fill: #C4A882;
+  opacity: 0.7;
+}
+.bm-pf__placeholder-text {
+  font-size: 13px;
+  color: #8C7B72;
+}
+
+/* ===== 캡션 ===== */
+.bm-pf__caption {
+  padding-top: 12px;
+  padding-bottom: 8px;
+}
+.bm-pf__caption-title {
+  font-size: {{property.cardTitlePcSize}}px;
+  color: {{property.captionTitleColor}};
+  margin-bottom: 4px;
+}
+.bm-pf__caption-body {
+  font-size: {{property.cardDescPcSize}}px;
+  color: {{property.captionBodyColor}};
+  line-height: 1.6;
+}
+
+/* ===== 반응형 — 태블릿 ===== */
+@media (max-width: 1024px) {
+  .bm-pf__row { flex-direction: column !important; }
+  .bm-pf__col-text,
+  .bm-pf__col-gallery {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  .bm-pf__content {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    margin-bottom: 32px;
+  }
+}
+
+/* ===== 반응형 — 모바일 ===== */
+@media (max-width: 768px) {
+  .bm-pf {
+    padding: {{property.sectionPaddingTopMobile}}px 0 {{property.sectionPaddingBottomMobile}}px 0;
+  }
+  .bm-pf__container { padding: 0 16px; }
+  .bm-pf__badge { font-size: {{property.badgeMoSize}}px; }
+  .bm-pf__title { font-size: {{property.titleMoSize}}px; }
+  .bm-pf__desc p { font-size: {{property.descMoSize}}px; }
+  .bm-pf__cta,
+  .bm-pf__cta--secondary {
+    font-size: {{property.btnMoSize}}px;
+    padding: {{property.btnPaddingVMo}}px {{property.btnPaddingHMo}}px;
+  }
+
+  .bm-pf__img-wrap {
+    {{#if (eq property.imageAspectRatio "custom")}}
+    height: {{property.customImageHeightMobile}}px;
+    {{/if}}
+  }
+  .bm-pf__caption-title { font-size: {{property.cardTitleMoSize}}px; }
+  .bm-pf__caption-body { font-size: {{property.cardDescMoSize}}px; }
+
+  {{#if property.ctaButtonFullWidth}}
+  .bm-pf__cta-wrap { flex-direction: column; width: 100%; }
+  .bm-pf__cta,
+  .bm-pf__cta--secondary { width: 100%; }
+  {{/if}}
+
+  {{#unless property.showGalleryControlsMobile}}
+  .bm-pf__controls { display: none !important; }
+  {{/unless}}
+
+  {{#unless property.showCaptionMobile}}
+  .bm-pf__caption { display: none !important; }
+  {{/unless}}
+
+  .bm-pf__ctrl-btn { min-width: 44px; min-height: 44px; }
+
+  /* 모바일 1개 꽉 채움 — 갭 제거 */
+  {{#if (eq property.mobileColumns "1")}}
+  .bm-pf__item-inner { padding-right: 0; }
+  {{/if}}
+}
+</style>
+
+<template>
+  <section class="bm-pf">
+    <div class="bm-pf__container">
+      <div class="bm-pf__row">
+
+        <!-- 텍스트 & 컨트롤 영역 -->
+        <div class="bm-pf__col-text">
+          <div class="bm-pf__content">
+
+            {{#if property.showHighlightTitle}}
+            <div class="bm-pf__badge">
+              {{{property.highlightTitle}}}
+            </div>
+            {{/if}}
+
+            <h2 class="bm-pf__title">{{{property.title}}}</h2>
+
+            <div class="bm-pf__desc">
+              {{{property.description}}}
+            </div>
+
+            {{#if property.showGalleryControls}}
+            <div class="bm-pf__controls">
+              <button class="bm-pf__ctrl-btn bm-pf__prev-btn" aria-label="이전 슬라이드">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M168.49,199.51a12,12,0,0,1-17,17l-80-80a12,12,0,0,1,0-17l80-80a12,12,0,0,1,17,17L97,128Z"/></svg>
+              </button>
+              <button class="bm-pf__ctrl-btn bm-pf__play-pause-btn" aria-label="재생/일시정지">
+                <svg class="bm-pf__icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M216,48V208a16,16,0,0,1-16,16H160a16,16,0,0,1-16-16V48a16,16,0,0,1,16-16h40A16,16,0,0,1,216,48ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Z"/></svg>
+                <svg class="bm-pf__icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" style="display:none"><path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"/></svg>
+              </button>
+              <div class="bm-pf__progress">
+                <div class="bm-pf__progress-bg">
+                  <div class="bm-pf__progress-fill"></div>
+                </div>
+              </div>
+              <div class="bm-pf__counter">
+                <span class="bm-pf__current">01</span> / <span class="bm-pf__total">{{size property.galleryItems}}</span>
+              </div>
+              <button class="bm-pf__ctrl-btn bm-pf__next-btn" aria-label="다음 슬라이드">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M184.49,136.49l-80,80a12,12,0,0,1-17-17L159,128,87.51,56.49a12,12,0,0,1,17-17l80,80A12,12,0,0,1,184.49,136.49Z"/></svg>
+              </button>
+            </div>
+            {{/if}}
+
+            {{#if (or property.showCtaButton property.showCta2Button)}}
+            <div class="bm-pf__cta-wrap">
+              {{#if property.showCtaButton}}
+              <a href="{{property.ctaLink.value}}"
+                 class="bm-pf__cta"
+                 {{#if property.ctaOpenNewTab}}target="_blank" rel="noopener noreferrer"{{/if}}>
+                {{property.ctaButtonText}}
+              </a>
+              {{/if}}
+              {{#if property.showCta2Button}}
+              <a href="{{property.cta2Link.value}}"
+                 class="bm-pf__cta--secondary"
+                 {{#if property.cta2OpenNewTab}}target="_blank" rel="noopener noreferrer"{{/if}}>
+                {{property.cta2ButtonText}}
+              </a>
+              {{/if}}
+            </div>
+            {{/if}}
+
+          </div>
+        </div>
+
+        <!-- 갤러리 영역 -->
+        <div class="bm-pf__col-gallery">
+          <div class="bm-pf__gallery-wrap">
+            <div class="bm-pf__gallery-track">
+              {{#each property.galleryItems}}
+              <div class="bm-pf__item" data-original="true">
+                <div class="bm-pf__item-inner">
+                  <div class="bm-pf__img-wrap">
+                    {{#if image}}
+                    <img src="{{image}}" alt="{{imageAlt}}" loading="lazy">
+                    {{else}}
+                    <div class="bm-pf__placeholder">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM156,88a12,12,0,1,1-12,12A12,12,0,0,1,156,88Zm60,112H40V177.65l53.66-53.66a8,8,0,0,1,11.31,0L165.66,184.7a8,8,0,0,0,11.31,0L197.66,164a8,8,0,0,1,11.31,0L216,170.73Z"/></svg>
+                      <span class="bm-pf__placeholder-text">이미지를 첨부해주세요</span>
+                    </div>
+                    {{/if}}
+                  </div>
+                  {{#if ../property.showCaption}}
+                  <div class="bm-pf__caption">
+                    <p class="bm-pf__caption-title">{{title}}</p>
+                    <p class="bm-pf__caption-body">{{body}}</p>
+                  </div>
+                  {{/if}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+var container = bm.container;
+var context = bm.context;
+
+var GAP_SIZE = 16;
+
+var state = {
+  currentIndex: 0,
+  realIndex: 0,
+  isPlaying: false,
+  autoPlayInterval: null,
+  itemsPerView: 2,
+  totalSlides: 0,
+  isTransitioning: false,
+  itemWidth: 0,
+  isDragging: false,
+  startX: 0,
+  currentX: 0,
+  dragOffset: 0,
+  startTime: 0
+};
+
+var elements = null;
+var imageObserver = null;
+var resizeTimer = null;
+
+/* ===== 유틸리티 ===== */
+
+function isMobile() {
+  return window.innerWidth <= 768;
+}
+
+function formatNumber(num) {
+  return num < 10 ? '0' + num : '' + num;
+}
+
+function getMobileColumns() {
+  return parseFloat(context.property.mobileColumns) || 1;
+}
+
+/* ===== 요소 캐싱 ===== */
+
+function cacheElements() {
+  elements = {
+    galleryContainer: container.querySelector('.bm-pf__gallery-track'),
+    galleryWrapper: container.querySelector('.bm-pf__gallery-wrap'),
+    prevBtn: container.querySelector('.bm-pf__prev-btn'),
+    nextBtn: container.querySelector('.bm-pf__next-btn'),
+    playPauseBtn: container.querySelector('.bm-pf__play-pause-btn'),
+    iconPause: container.querySelector('.bm-pf__icon-pause'),
+    iconPlay: container.querySelector('.bm-pf__icon-play'),
+    progressBarFill: container.querySelector('.bm-pf__progress-fill'),
+    currentSlideEl: container.querySelector('.bm-pf__current'),
+    totalSlidesEl: container.querySelector('.bm-pf__total')
+  };
+}
+
+/* ===== 아이템 너비 계산 ===== */
+
+function calculateItemWidth() {
+  if (!elements || !elements.galleryWrapper) return 0;
+  var wrapperWidth = elements.galleryWrapper.offsetWidth;
+  var perView = state.itemsPerView;
+  return wrapperWidth / perView;
+}
+
+function setItemWidths() {
+  if (!elements || !elements.galleryContainer) return;
+  var w = calculateItemWidth();
+  var allItems = elements.galleryContainer.querySelectorAll('.bm-pf__item');
+  for (var i = 0; i < allItems.length; i++) {
+    allItems[i].style.width = w + 'px';
+    allItems[i].style.minWidth = w + 'px';
+  }
+  state.itemWidth = w;
+
+  /* 모바일 1개 꽉 채움일 때 갭 제거 (JS 보조) */
+  var isMobileFull = isMobile() && getMobileColumns() === 1;
+  var innerEls = elements.galleryContainer.querySelectorAll('.bm-pf__item-inner');
+  for (var j = 0; j < innerEls.length; j++) {
+    innerEls[j].style.paddingRight = isMobileFull ? '0px' : '';
+  }
+}
+
+/* ===== Lazy Loading ===== */
+
+function setupLazyLoading() {
+  if (imageObserver) {
+    imageObserver.disconnect();
+  }
+
+  if (!('IntersectionObserver' in window)) return;
+
+  imageObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var img = entry.target;
+        var src = img.getAttribute('data-src');
+        if (src && !img.src) {
+          img.src = src;
+          img.removeAttribute('data-src');
+        }
+        imageObserver.unobserve(img);
+      }
+    });
+  }, {
+    root: elements.galleryWrapper,
+    rootMargin: '50px',
+    threshold: 0.01
+  });
+
+  var images = container.querySelectorAll('.bm-pf__img-wrap img[data-src]');
+  for (var i = 0; i < images.length; i++) {
+    imageObserver.observe(images[i]);
+  }
+}
+
+/* ===== 클론 생성 (무한 루프) ===== */
+
+function createClones() {
+  if (!elements || !elements.galleryContainer) return;
+
+  var originalItems = container.querySelectorAll('.bm-pf__item[data-original="true"]');
+  if (!originalItems.length) return;
+
+  /* 기존 클론 제거 */
+  var existingClones = container.querySelectorAll('.bm-pf__item[data-clone="true"]');
+  for (var c = existingClones.length - 1; c >= 0; c--) {
+    existingClones[c].remove();
+  }
+
+  /* 소수 perView를 올림하여 클론 수 결정 */
+  var cloneCount = Math.min(Math.ceil(state.itemsPerView), originalItems.length);
+
+  /* 앞쪽 클론 (뒤에서 가져옴) */
+  for (var i = originalItems.length - cloneCount; i < originalItems.length; i++) {
+    var clone = originalItems[i].cloneNode(true);
+    clone.setAttribute('data-clone', 'true');
+    clone.removeAttribute('data-original');
+    var img = clone.querySelector('img');
+    if (img && img.src) {
+      img.setAttribute('data-src', img.src);
+      img.removeAttribute('src');
+      img.removeAttribute('srcset');
+    }
+    elements.galleryContainer.insertBefore(clone, elements.galleryContainer.firstChild);
+  }
+
+  /* 뒤쪽 클론 (앞에서 가져옴) */
+  for (var j = 0; j < cloneCount; j++) {
+    var clone2 = originalItems[j].cloneNode(true);
+    clone2.setAttribute('data-clone', 'true');
+    clone2.removeAttribute('data-original');
+    var img2 = clone2.querySelector('img');
+    if (img2 && img2.src) {
+      img2.setAttribute('data-src', img2.src);
+      img2.removeAttribute('src');
+      img2.removeAttribute('srcset');
+    }
+    elements.galleryContainer.appendChild(clone2);
+  }
+
+  setupLazyLoading();
+}
+
+/* ===== 슬라이드 위치 계산 ===== */
+
+function updateSlidePosition(noTransition, dragOff) {
+  if (!elements || !elements.galleryContainer) return;
+
+  var additional = dragOff || 0;
+
+  if (noTransition) {
+    elements.galleryContainer.classList.add('bm-pf--no-transition');
+  } else {
+    elements.galleryContainer.classList.remove('bm-pf--no-transition');
+  }
+
+  var offset = -state.currentIndex * state.itemWidth + additional;
+
+  requestAnimationFrame(function() {
+    if (elements && elements.galleryContainer) {
+      elements.galleryContainer.style.transform = 'translateX(' + offset + 'px)';
+    }
+  });
+}
+
+function getCloneOffset() {
+  return Math.min(Math.ceil(state.itemsPerView), state.totalSlides);
+}
+
+function calculateRealIndex() {
+  var cloneOffset = getCloneOffset();
+  var realIdx = state.currentIndex - cloneOffset;
+
+  if (realIdx < 0) {
+    realIdx = state.totalSlides + realIdx;
+  } else if (realIdx >= state.totalSlides) {
+    realIdx = realIdx % state.totalSlides;
+  }
+  return realIdx;
+}
+
+function updateUI() {
+  if (!elements) return;
+
+  state.realIndex = calculateRealIndex();
+
+  if (elements.currentSlideEl) {
+    elements.currentSlideEl.textContent = formatNumber(state.realIndex + 1);
+  }
+
+  if (elements.progressBarFill && state.totalSlides > 0) {
+    var progress = ((state.realIndex + 1) / state.totalSlides) * 100;
+    elements.progressBarFill.style.width = progress + '%';
+  }
+}
+
+function handleInfiniteLoop() {
+  var cloneOffset = getCloneOffset();
+
+  if (state.currentIndex < cloneOffset) {
+    state.currentIndex = cloneOffset + state.totalSlides + (state.currentIndex - cloneOffset);
+    updateSlidePosition(true);
+  } else if (state.currentIndex >= cloneOffset + state.totalSlides) {
+    state.currentIndex = cloneOffset + (state.currentIndex - cloneOffset - state.totalSlides);
+    updateSlidePosition(true);
+  }
+}
+
+function updateSlide(noTransition) {
+  updateSlidePosition(noTransition);
+  updateUI();
+
+  if (!noTransition) {
+    setTimeout(function() {
+      handleInfiniteLoop();
+    }, 520);
+  }
+}
+
+/* ===== 슬라이드 네비게이션 ===== */
+
+function prevSlide() {
+  if (state.isTransitioning || state.isDragging) return;
+  state.isTransitioning = true;
+  state.currentIndex--;
+  updateSlide();
+  resetAutoPlay();
+  setTimeout(function() { state.isTransitioning = false; }, 520);
+}
+
+function nextSlide() {
+  if (state.isTransitioning || state.isDragging) return;
+  state.isTransitioning = true;
+  state.currentIndex++;
+  updateSlide();
+  resetAutoPlay();
+  setTimeout(function() { state.isTransitioning = false; }, 520);
+}
+
+/* ===== 재생 컨트롤 ===== */
+
+function updatePlayPauseIcon() {
+  if (!elements) return;
+  if (elements.iconPause && elements.iconPlay) {
+    if (state.isPlaying) {
+      elements.iconPause.style.display = '';
+      elements.iconPlay.style.display = 'none';
+    } else {
+      elements.iconPause.style.display = 'none';
+      elements.iconPlay.style.display = '';
+    }
+  }
+}
+
+function togglePlayPause() {
+  if (state.isPlaying) {
+    pause();
+  } else {
+    play();
+  }
+}
+
+function play() {
+  state.isPlaying = true;
+  updatePlayPauseIcon();
+  startAutoPlay();
+}
+
+function pause() {
+  state.isPlaying = false;
+  updatePlayPauseIcon();
+  stopAutoPlay();
+}
+
+function startAutoPlay() {
+  stopAutoPlay();
+  if (context.property.autoPlay && state.isPlaying && state.totalSlides > 0) {
+    var interval = context.property.autoPlayInterval * 1000;
+    state.autoPlayInterval = setInterval(function() {
+      nextSlide();
+    }, interval);
+  }
+}
+
+function stopAutoPlay() {
+  if (state.autoPlayInterval) {
+    clearInterval(state.autoPlayInterval);
+    state.autoPlayInterval = null;
+  }
+}
+
+function resetAutoPlay() {
+  if (state.isPlaying && context.property.autoPlay) {
+    startAutoPlay();
+  }
+}
+
+/* ===== 드래그 / 스와이프 ===== */
+
+function onDragStart(x) {
+  if (state.isTransitioning) return;
+  state.isDragging = true;
+  state.startX = x;
+  state.currentX = x;
+  state.dragOffset = 0;
+  state.startTime = Date.now();
+  if (elements && elements.galleryContainer) {
+    elements.galleryContainer.classList.add('bm-pf--dragging');
+  }
+}
+
+function onDragMove(x) {
+  if (!state.isDragging) return;
+  state.currentX = x;
+  state.dragOffset = state.currentX - state.startX;
+  updateSlidePosition(false, state.dragOffset);
+}
+
+function onDragEnd() {
+  if (!state.isDragging) return;
+  state.isDragging = false;
+
+  if (elements && elements.galleryContainer) {
+    elements.galleryContainer.classList.remove('bm-pf--dragging');
+  }
+
+  var distance = state.currentX - state.startX;
+  var elapsed = Date.now() - state.startTime;
+  var velocity = Math.abs(distance / elapsed);
+
+  var threshold = state.itemWidth * 0.2;
+
+  if (Math.abs(distance) > threshold || velocity > 0.3) {
+    if (distance > 0) {
+      prevSlide();
+    } else {
+      nextSlide();
+    }
+  } else {
+    updateSlide();
+  }
+}
+
+function handleTouchStart(e) {
+  if (!context.property.enableSwipeGesture && isMobile()) return;
+  var touch = e.touches[0];
+  onDragStart(touch.clientX);
+}
+
+function handleTouchMove(e) {
+  if (!state.isDragging) return;
+  var touch = e.touches[0];
+  onDragMove(touch.clientX);
+}
+
+function handleTouchEnd() {
+  onDragEnd();
+}
+
+function handleMouseDown(e) {
+  if (isMobile()) return;
+  e.preventDefault();
+  onDragStart(e.clientX);
+}
+
+function handleMouseMove(e) {
+  if (!state.isDragging) return;
+  e.preventDefault();
+  onDragMove(e.clientX);
+}
+
+function handleMouseUp() {
+  onDragEnd();
+}
+
+/* ===== 이벤트 바인딩 ===== */
+
+function bindEvents() {
+  container.addEventListener('click', function(e) {
+    if (state.isDragging) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    if (e.target.closest('.bm-pf__prev-btn')) {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.target.closest('.bm-pf__next-btn')) {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.target.closest('.bm-pf__play-pause-btn')) {
+      e.preventDefault();
+      togglePlayPause();
+    }
+  }, true);
+
+  var wrapper = container.querySelector('.bm-pf__gallery-wrap');
+  if (wrapper) {
+    wrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
+    wrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+    wrapper.addEventListener('touchend', handleTouchEnd, { passive: true });
+    wrapper.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }
+
+  window.addEventListener('resize', handleResize);
+}
+
+function handleResize() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() {
+    var newPerView = isMobile() ? getMobileColumns() : context.property.desktopColumns;
+    state.itemsPerView = newPerView;
+
+    if (state.totalSlides === 0) return;
+
+    createClones();
+    setItemWidths();
+
+    var cloneOffset = getCloneOffset();
+    state.currentIndex = cloneOffset + state.realIndex;
+    updateSlide(true);
+  }, 150);
+}
+
+/* ===== 초기화 ===== */
+
+function init() {
+  cacheElements();
+
+  var items = context.property.galleryItems || [];
+  state.totalSlides = items.length;
+  state.itemsPerView = isMobile() ? getMobileColumns() : context.property.desktopColumns;
+
+  if (state.totalSlides === 0 || !elements || !elements.galleryContainer) return;
+
+  createClones();
+  setItemWidths();
+
+  var cloneOffset = getCloneOffset();
+  state.currentIndex = cloneOffset;
+
+  updateSlide(true);
+
+  if (elements.totalSlidesEl) {
+    elements.totalSlidesEl.textContent = formatNumber(state.totalSlides);
+  }
+
+  if (context.property.autoPlay) {
+    play();
+  } else {
+    pause();
+  }
+}
+
+/* ===== 실행 ===== */
+
+init();
+bindEvents();
+
+bm.onContextChange = function() {
+  stopAutoPlay();
+  state.currentIndex = 0;
+  state.realIndex = 0;
+  state.isTransitioning = false;
+  state.isDragging = false;
+
+  setTimeout(function() {
+    init();
+  }, 50);
+};
+
+bm.onDestroy = function() {
+  stopAutoPlay();
+  clearTimeout(resizeTimer);
+
+  if (imageObserver) {
+    imageObserver.disconnect();
+    imageObserver = null;
+  }
+
+  document.removeEventListener('mousemove', handleMouseMove);
+  document.removeEventListener('mouseup', handleMouseUp);
+  window.removeEventListener('resize', handleResize);
+
+  elements = null;
+};
+</script>
+
+{"settings":[{"type":"TITLE","content":"누끼토끼 전문 개발 블록"},{"type":"DESCRIPTION","content":"【 안내 】\n코드 없이 직접 운영하실 수 있도록\n전문 개발자가 기획·설계·구현했습니다.\n간단한 수정은 블록 AI를 활용하시고,\n고도화된 커스텀이 필요하시면\n전문가에게 의뢰해 주세요."},{"type":"TITLE","content":"📋 기본 콘텐츠"},{"type":"CHECKBOX","id":"showHighlightTitle","label":"강조 배지 표시","default":true},{"type":"RICH_TEXT","id":"highlightTitle","label":"강조 배지","default":"<p>FEATURED</p>","isVisible":"property.showHighlightTitle == true"},{"type":"RANGE","id":"badgePcSize","label":"↳ 배지 PC 글씨 크기","min":10,"max":18,"step":1,"unit":"px","default":12,"isVisible":"property.showHighlightTitle == true"},{"type":"RANGE","id":"badgeMoSize","label":"↳ 배지 모바일 글씨 크기","min":9,"max":16,"step":1,"unit":"px","default":12,"isVisible":"property.showHighlightTitle == true"},{"type":"RICH_TEXT","id":"title","label":"제목","default":"<p>자기(自己)다운 자기(瓷器)</p>"},{"type":"RANGE","id":"titlePcSize","label":"↳ 제목 PC 글씨 크기","min":20,"max":52,"step":1,"unit":"px","default":32},{"type":"RANGE","id":"titleMoSize","label":"↳ 제목 모바일 글씨 크기","min":18,"max":36,"step":1,"unit":"px","default":22},{"type":"RICH_TEXT","id":"description","label":"설명","default":"<p>자기다움, 깨끗함,<br>진심의 가치를 담은 도자기를 만들며<br>도자기를 통해 자기 지향적 삶을 제안합니다.</p>"},{"type":"RANGE","id":"descPcSize","label":"↳ 설명 PC 글씨 크기","min":12,"max":20,"step":1,"unit":"px","default":14},{"type":"RANGE","id":"descMoSize","label":"↳ 설명 모바일 글씨 크기","min":12,"max":18,"step":1,"unit":"px","default":13},{"type":"TITLE","content":"🖼️ 갤러리 이미지"},{"type":"LIST","id":"galleryItems","label":"갤러리 아이템","maxCount":30,"settings":[{"type":"IMAGE_PICKER","id":"image","label":"이미지"},{"type":"TEXT","id":"imageAlt","label":"이미지 설명 (alt)","default":"포트폴리오 이미지"},{"type":"TEXT","id":"title","label":"캡션 제목","default":"프로젝트 제목"},{"type":"TEXT","id":"body","label":"캡션 설명","default":"프로젝트 상세 정보"}]},{"type":"RADIO","id":"imageAspectRatio","label":"이미지 비율","options":[{"value":"1/1","label":"1:1"},{"value":"3/4","label":"3:4"},{"value":"4/3","label":"4:3"},{"value":"16/9","label":"16:9"},{"value":"custom","label":"커스텀"}],"default":"3/4"},{"type":"RANGE","id":"customImageHeight","label":"↳ 이미지 높이 (데스크톱)","min":200,"max":800,"step":10,"unit":"px","default":513,"isVisible":"property.imageAspectRatio === 'custom'"},{"type":"RANGE","id":"customImageHeightMobile","label":"↳ 이미지 높이 (모바일)","min":200,"max":600,"step":10,"unit":"px","default":380,"isVisible":"property.imageAspectRatio === 'custom'"},{"type":"RANGE","id":"imageBorderRadius","label":"이미지 둥근 모서리","min":0,"max":32,"step":1,"unit":"px","default":4},{"type":"TITLE","content":"🎬 슬라이더 동작"},{"type":"CHECKBOX","id":"autoPlay","label":"자동 재생","default":true},{"type":"RANGE","id":"autoPlayInterval","label":"↳ 자동 재생 간격","min":2,"max":10,"step":1,"unit":"초","default":6,"isVisible":"property.autoPlay == true"},{"type":"RANGE","id":"desktopColumns","label":"한 번에 보이는 이미지 수 (데스크톱)","min":1,"max":4,"step":1,"unit":"개","default":2},{"id":"mobileColumns","label":"모바일 이미지 표시 방식","options":[{"value":"1","label":"1개"},{"value":"1.5","label":"1.5개"},{"value":"2","label":"2개"}],"optionLabelType":"text","defaultIndex":1,"type":"RADIO"},{"type":"CHECKBOX","id":"showGalleryControls","label":"재생 컨트롤 표시 (데스크톱)","default":true},{"type":"CHECKBOX","id":"showGalleryControlsMobile","label":"재생 컨트롤 표시 (모바일)","default":false},{"type":"CHECKBOX","id":"enableSwipeGesture","label":"스와이프 제스처 활성화 (모바일)","default":true},{"type":"TITLE","content":"🔘 CTA 버튼"},{"type":"RANGE","id":"btnPcSize","label":"버튼 텍스트 PC 글씨 크기","min":12,"max":20,"step":1,"unit":"px","default":14},{"type":"RANGE","id":"btnMoSize","label":"버튼 텍스트 모바일 글씨 크기","min":12,"max":18,"step":1,"unit":"px","default":13},{"type":"RANGE","id":"btnPaddingV","label":"버튼 상하 여백 (PC)","min":4,"max":24,"step":1,"unit":"px","default":10},{"type":"RANGE","id":"btnPaddingH","label":"버튼 좌우 여백 (PC)","min":8,"max":60,"step":1,"unit":"px","default":28},{"type":"RANGE","id":"btnPaddingVMo","label":"버튼 상하 여백 (모바일)","min":4,"max":24,"step":1,"unit":"px","default":10},{"type":"RANGE","id":"btnPaddingHMo","label":"버튼 좌우 여백 (모바일)","min":8,"max":48,"step":1,"unit":"px","default":24},{"type":"RANGE","id":"btnBorderRadius","label":"버튼 둥근 모서리","min":0,"max":100,"step":1,"unit":"px","default":0},{"type":"RANGE","id":"btnBorderWidth","label":"버튼 테두리 두께","min":0,"max":4,"step":1,"unit":"px","default":1},{"type":"CHECKBOX","id":"ctaButtonFullWidth","label":"버튼 전체 너비 사용 (모바일)","default":false},{"type":"TITLE","content":"첫 번째 버튼"},{"type":"CHECKBOX","id":"showCtaButton","label":"첫 번째 버튼 표시","default":true},{"type":"TEXT","id":"ctaButtonText","label":"버튼 텍스트","default":"About Us","isVisible":"property.showCtaButton == true"},{"type":"LINK","id":"ctaLink","label":"버튼 링크","isVisible":"property.showCtaButton == true"},{"type":"CHECKBOX","id":"ctaOpenNewTab","label":"새 탭에서 열기","default":false,"isVisible":"property.showCtaButton == true"},{"type":"COLOR_PICKER","id":"ctaTextColor","label":"텍스트 색상","default":"#3B2E2A","isVisible":"property.showCtaButton == true"},{"type":"COLOR_PICKER","id":"ctaBgColor","label":"배경 색상","default":"#FFFFFF","isVisible":"property.showCtaButton == true"},{"type":"COLOR_PICKER","id":"ctaBorderColor","label":"테두리 색상","default":"#3B2E2A","isVisible":"property.showCtaButton == true"},{"type":"COLOR_PICKER","id":"ctaHoverTextColor","label":"호버 텍스트 색상","default":"#FAF8F5","isVisible":"property.showCtaButton == true"},{"type":"COLOR_PICKER","id":"ctaHoverBgColor","label":"호버 배경 색상","default":"#3B2E2A","isVisible":"property.showCtaButton == true"},{"type":"COLOR_PICKER","id":"ctaHoverBorderColor","label":"호버 테두리 색상","default":"#3B2E2A","isVisible":"property.showCtaButton == true"},{"type":"TITLE","content":"두 번째 버튼"},{"type":"CHECKBOX","id":"showCta2Button","label":"두 번째 버튼 표시","default":true},{"type":"TEXT","id":"cta2ButtonText","label":"버튼 텍스트","default":"Shop Now","isVisible":"property.showCta2Button == true"},{"type":"LINK","id":"cta2Link","label":"버튼 링크","isVisible":"property.showCta2Button == true"},{"type":"CHECKBOX","id":"cta2OpenNewTab","label":"새 탭에서 열기","default":false,"isVisible":"property.showCta2Button == true"},{"type":"COLOR_PICKER","id":"cta2TextColor","label":"텍스트 색상","default":"#FAF8F5","isVisible":"property.showCta2Button == true"},{"type":"COLOR_PICKER","id":"cta2BgColor","label":"배경 색상","default":"#3B2E2A","isVisible":"property.showCta2Button == true"},{"type":"COLOR_PICKER","id":"cta2BorderColor","label":"테두리 색상","default":"#3B2E2A","isVisible":"property.showCta2Button == true"},{"type":"COLOR_PICKER","id":"cta2HoverTextColor","label":"호버 텍스트 색상","default":"#FAF8F5","isVisible":"property.showCta2Button == true"},{"type":"COLOR_PICKER","id":"cta2HoverBgColor","label":"호버 배경 색상","default":"#2A1F1C","isVisible":"property.showCta2Button == true"},{"type":"COLOR_PICKER","id":"cta2HoverBorderColor","label":"호버 테두리 색상","default":"#2A1F1C","isVisible":"property.showCta2Button == true"},{"type":"TITLE","content":"🎨 디자인 & 색상"},{"type":"RADIO","id":"layoutDirection","label":"레이아웃 방향 (데스크톱)","options":[{"value":"text-gallery","label":"텍스트 → 갤러리"},{"value":"gallery-text","label":"갤러리 → 텍스트"}],"default":"text-gallery"},{"type":"RANGE","id":"leftColumnWidth","label":"텍스트 영역 너비","min":20,"max":50,"step":5,"unit":"%","default":33},{"type":"COLOR_PICKER","id":"backgroundColor","label":"섹션 배경색","default":"#FAF8F5"},{"type":"COLOR_PICKER","id":"controlColor","label":"컨트롤 색상","default":"#3B2E2A"},{"type":"COLOR_PICKER","id":"progressBarColor","label":"프로그레스 바 색상","default":"#3B2E2A"},{"type":"TITLE","content":"강조 배지 스타일"},{"type":"COLOR_PICKER","id":"highlightTitleBgColor","label":"배지 배경색","default":"#EDE3D8","isVisible":"property.showHighlightTitle == true"},{"type":"RANGE","id":"highlightTitleBorderRadius","label":"배지 둥근 모서리","min":0,"max":999,"step":1,"unit":"px","default":999,"isVisible":"property.showHighlightTitle == true"},{"type":"TITLE","content":"🏷️ 캡션 설정"},{"type":"CHECKBOX","id":"showCaption","label":"캡션 표시 (데스크톱)","default":false},{"type":"CHECKBOX","id":"showCaptionMobile","label":"캡션 표시 (모바일)","default":false},{"type":"RANGE","id":"cardTitlePcSize","label":"↳ 캡션 제목 PC 글씨 크기","min":12,"max":20,"step":1,"unit":"px","default":14,"isVisible":"property.showCaption == true"},{"type":"RANGE","id":"cardTitleMoSize","label":"↳ 캡션 제목 모바일 글씨 크기","min":11,"max":18,"step":1,"unit":"px","default":13,"isVisible":"property.showCaption == true"},{"type":"RANGE","id":"cardDescPcSize","label":"↳ 캡션 설명 PC 글씨 크기","min":10,"max":18,"step":1,"unit":"px","default":13,"isVisible":"property.showCaption == true"},{"type":"RANGE","id":"cardDescMoSize","label":"↳ 캡션 설명 모바일 글씨 크기","min":10,"max":16,"step":1,"unit":"px","default":13,"isVisible":"property.showCaption == true"},{"type":"COLOR_PICKER","id":"captionTitleColor","label":"캡션 제목 색상","default":"#3B2E2A","isVisible":"property.showCaption == true"},{"type":"COLOR_PICKER","id":"captionBodyColor","label":"캡션 설명 색상","default":"#8C7B72","isVisible":"property.showCaption == true"},{"type":"TITLE","content":"📐 간격 설정"},{"type":"RANGE","id":"badgeTitleGap","label":"배지 ↔ 제목 간격","min":8,"max":40,"step":4,"unit":"px","default":16,"isVisible":"property.showHighlightTitle == true"},{"type":"RANGE","id":"titleDescGap","label":"제목 ↔ 설명 간격","min":8,"max":60,"step":4,"unit":"px","default":24},{"type":"RANGE","id":"descControlsGap","label":"설명 ↔ 컨트롤 간격","min":8,"max":60,"step":4,"unit":"px","default":24,"isVisible":"property.showGalleryControls == true"},{"type":"RANGE","id":"controlsBtnGap","label":"컨트롤 ↔ 버튼 간격","min":0,"max":60,"step":4,"unit":"px","default":24,"isVisible":"property.showGalleryControls == true"},{"type":"RANGE","id":"sectionPaddingTop","label":"섹션 상단 여백 (데스크톱)","min":0,"max":200,"step":8,"unit":"px","default":80},{"type":"RANGE","id":"sectionPaddingBottom","label":"섹션 하단 여백 (데스크톱)","min":0,"max":200,"step":8,"unit":"px","default":80},{"type":"RANGE","id":"sectionPaddingTopMobile","label":"섹션 상단 여백 (모바일)","min":0,"max":120,"step":8,"unit":"px","default":48},{"type":"RANGE","id":"sectionPaddingBottomMobile","label":"섹션 하단 여백 (모바일)","min":0,"max":120,"step":8,"unit":"px","default":48},{"type":"RANGE","id":"containerMaxWidth","label":"컨테이너 최대 너비","min":1000,"max":1600,"step":50,"unit":"px","default":1200}],"property":{"showHighlightTitle":true,"highlightTitle":"<p>FEATURED</p>","badgePcSize":12,"badgeMoSize":12,"title":"<p>Old soul. <br>New table.</p>","titlePcSize":32,"titleMoSize":22,"description":"<p>Perléa pursues a self-directed life through porcelain. Rooted in the values of authenticity, purity, and sincerity, we craft art that lets you express and comfort yourself in everyday life.</p>","descPcSize":14,"descMoSize":13,"galleryItems":[{"image":"","imageAlt":"포트폴리오 이미지 1","title":"프로젝트 제목 1","body":"프로젝트 상세 정보"},{"image":"","imageAlt":"포트폴리오 이미지 2","title":"프로젝트 제목 2","body":"프로젝트 상세 정보"},{"image":"","imageAlt":"포트폴리오 이미지 3","title":"프로젝트 제목 3","body":"프로젝트 상세 정보"}],"imageAspectRatio":"3/4","customImageHeight":513,"customImageHeightMobile":380,"imageBorderRadius":0,"autoPlay":true,"autoPlayInterval":6,"desktopColumns":2,"mobileColumns":"1.5","showGalleryControls":true,"showGalleryControlsMobile":false,"enableSwipeGesture":true,"btnPcSize":14,"btnMoSize":13,"btnPaddingV":10,"btnPaddingH":28,"btnPaddingVMo":10,"btnPaddingHMo":24,"btnBorderRadius":0,"btnBorderWidth":1,"ctaButtonFullWidth":false,"showCtaButton":true,"ctaButtonText":"About Us","ctaLink":{"type":"url","value":"/","label":"/"},"ctaOpenNewTab":false,"ctaTextColor":"#3B2E2A","ctaBgColor":"#FFFFFF","ctaBorderColor":"#3B2E2A","ctaHoverTextColor":"#FAF8F5","ctaHoverBgColor":"#3B2E2A","ctaHoverBorderColor":"#3B2E2A","showCta2Button":true,"cta2ButtonText":"Shop Now","cta2Link":{"type":"url","value":"/","label":"/"},"cta2OpenNewTab":false,"cta2TextColor":"#FAF8F5","cta2BgColor":"#3B2E2A","cta2BorderColor":"#3B2E2A","cta2HoverTextColor":"#FAF8F5","cta2HoverBgColor":"#2A1F1C","cta2HoverBorderColor":"#2A1F1C","layoutDirection":"text-gallery","leftColumnWidth":33,"backgroundColor":"#FFFFFF00","controlColor":"#3B2E2A","progressBarColor":"#3B2E2A","highlightTitleBgColor":"#EDE3D8","highlightTitleBorderRadius":999,"showCaption":false,"showCaptionMobile":false,"cardTitlePcSize":14,"cardTitleMoSize":13,"cardDescPcSize":13,"cardDescMoSize":13,"captionTitleColor":"#3B2E2A","captionBodyColor":"#8C7B72","badgeTitleGap":16,"titleDescGap":24,"descControlsGap":24,"controlsBtnGap":24,"sectionPaddingTop":80,"sectionPaddingBottom":80,"sectionPaddingTopMobile":48,"sectionPaddingBottomMobile":48,"containerMaxWidth":1200}}
