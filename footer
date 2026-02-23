@@ -1,0 +1,561 @@
+<style>
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===== 리셋 ===== */
+.bm-footer * {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.bm-footer li,
+.bm-footer ul {
+  list-style: none;
+}
+.bm-footer a {
+  text-decoration: none;
+}
+
+/* ===== 최상위 컨테이너 ===== */
+.bm-footer {
+  background-color: {{property.backgroundColor}};
+  color: {{property.textColor}};
+  word-break: break-word;
+  overflow-x: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-body);
+}
+
+/* ===== 내부 래퍼 ===== */
+.bm-footer__inner {
+  width: 100%;
+  max-width: {{property.maxWidth}}px;
+}
+
+/* ===== 정보 영역 ===== */
+.bm-footer__info-wrapper {
+  column-gap: 10.5px;
+  display: flex;
+  flex-direction: column;
+  font-size: max(var(--font-size-body-3, 0.75) * 1rem, 10px);
+  letter-spacing: var(--letter-spacing-body, 0);
+  line-height: var(--line-height-body, 1.6);
+  row-gap: 10.5px;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .bm-footer__info-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* ===== 시스템 메뉴 ===== */
+.bm-footer__system-menu {
+  column-gap: 15.75px;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 15.75px;
+}
+
+/* ===== 회사 정보 ===== */
+.bm-footer__company-wrapper {
+  column-gap: 5.25px;
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--spacing-text-body-m, 1em);
+  row-gap: 5.25px;
+}
+.bm-footer__company-info {
+  column-gap: 0;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 5.25px;
+}
+.bm-footer__info-item {
+  display: flex;
+}
+.bm-footer__info-item dt {
+  text-wrap-mode: nowrap;
+  white-space-collapse: preserve;
+}
+
+/* ===== 구분선 ===== */
+.bm-footer__divider {
+  border-left: 1px solid {{property.dividerColor}};
+  height: 1em;
+  margin-left: var(--spacing-text-body-xs, 0.5em);
+  margin-right: var(--spacing-text-body-xs, 0.5em);
+  width: fit-content;
+}
+
+/* ===== 로고 ===== */
+.bm-footer__logo-wrapper {
+  margin-top: var(--spacing-base-fl-m);
+  width: 100%;
+  display: flex;
+  justify-content: {{property.logoAlignment}};
+  overflow: hidden;
+}
+.bm-footer__logo {
+  max-width: 100%;
+  display: flex;
+  justify-content: {{property.logoAlignment}};
+  align-items: center;
+}
+.bm-footer__logo-text {
+  {{#if (eq property.logoFontFamily "heading")}}
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+  {{else if (eq property.logoFontFamily "body")}}
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-body);
+  {{else if (eq property.logoFontFamily "serif")}}
+  font-family: serif;
+  {{else}}
+  font-family: sans-serif;
+  {{/if}}
+  letter-spacing: var(--letter-spacing-logo, 0);
+  line-height: var(--line-height-logo, 1.25);
+  display: block;
+  color: {{property.logoColor}};
+  text-align: {{property.logoAlignment}};
+  white-space: nowrap;
+  font-size: {{property.logoSizeDesktop}}vw;
+}
+.bm-footer__logo-image {
+  max-width: {{property.logoImageWidth}}px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ===== SNS 링크 ===== */
+.bm-footer__sns-wrapper {
+  align-items: center;
+  column-gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: var(--spacing-text-body-xl, 1.5em);
+  row-gap: 10.5px;
+}
+.bm-footer__sns-wrapper svg[viewBox="0 0 55.35 50.89"] {
+  transform: scale(0.7);
+}
+.bm-footer__sns-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  {{#if property.snsIconBgEnabled}}
+  padding: {{property.snsIconPadding}}px;
+  background-color: {{property.snsIconBgColor}};
+  border-radius: 50%;
+  {{/if}}
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.bm-footer__sns-link:hover {
+  {{#if property.snsIconBgEnabled}}
+  opacity: 0.8;
+  transform: scale(1.05);
+  {{/if}}
+}
+.bm-footer__sns-link svg {
+  width: {{property.snsIconSize}}px;
+  height: {{property.snsIconSize}}px;
+  fill: {{property.snsIconColor}};
+}
+.bm-footer__sns-link img {
+  width: {{property.snsIconSize}}px;
+  height: {{property.snsIconSize}}px;
+  object-fit: contain;
+}
+
+/* ===== 텍스트 버튼 ===== */
+.bm-footer__text-btn {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  position: relative;
+  color: {{property.textColor}};
+  column-gap: 2.625px;
+  font-size: max(var(--font-size-body-3, 0.75) * 1rem, 10px);
+  letter-spacing: var(--letter-spacing-body, 0);
+  line-height: 1rem;
+  row-gap: 2.625px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.bm-footer__text-btn:active,
+.bm-footer__text-btn:hover {
+  opacity: 0.8;
+}
+
+/* ===== 저작권 ===== */
+.bm-footer__copyright {
+  font-size: max(var(--font-size-body-3, 0.75) * 1rem, 10px);
+  letter-spacing: var(--letter-spacing-body, 0);
+  line-height: var(--line-height-body, 1.6);
+}
+
+/* ===== 페이드 인 ===== */
+.bm-footer__fade {
+  animation: fadeIn 1.5s;
+}
+
+/* ===== 모달 ===== */
+.bm-footer__modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.bm-footer__modal-content {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 600px;
+  max-height: 80vh;
+  width: 90%;
+  overflow-y: auto;
+  position: relative;
+}
+.bm-footer__modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E8E0D5;
+}
+.bm-footer__modal-title {
+  font-size: 18px;
+  color: #3B2E2A;
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-heading);
+}
+.bm-footer__modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #4A3F38;
+  transition: background-color 0.2s;
+}
+.bm-footer__modal-close:hover {
+  background-color: #EDE3D8;
+}
+.bm-footer__modal-body {
+  color: #4A3F38;
+  line-height: 1.6;
+}
+.bm-footer__modal-body h2 {
+  font-size: 16px;
+  margin: 20px 0 10px;
+  color: #3B2E2A;
+}
+.bm-footer__modal-body p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+.bm-footer__modal-body strong {
+  font-weight: 700;
+}
+.bm-footer__modal-body em,
+.bm-footer__modal-body i {
+  font-style: italic;
+}
+
+/* ===== 반응형 — 태블릿 ===== */
+@media (max-width: 992px) {
+  .bm-footer__logo-text {
+    font-size: {{property.logoSizeTablet}}vw;
+  }
+  .bm-footer__logo-image {
+    max-width: calc({{property.logoImageWidth}}px * 0.75);
+  }
+}
+
+/* ===== 반응형 — 모바일 ===== */
+@media (max-width: 576px) {
+  .bm-footer__inner {
+    padding: 32px 20px;
+  }
+  .bm-footer__logo-text {
+    font-size: {{property.logoSizeMobile}}vw;
+  }
+  .bm-footer__logo-image {
+    max-width: calc({{property.logoImageWidth}}px * 0.5);
+  }
+  .bm-footer__modal-content {
+    width: 95%;
+    padding: 16px;
+  }
+}
+</style>
+<template>
+<footer class="bm-footer">
+  <div class="bm-footer__inner">
+    <div class="bm-footer__info-wrapper">
+      <div>
+        <ul class="bm-footer__system-menu">
+          <li>
+            {{#if (eq property.termsDisplayType "modal")}}
+              <button class="bm-footer__text-btn bm-footer__fade" data-modal="terms">이용약관</button>
+            {{else}}
+              <a href="{{property.termsLink.value}}" class="bm-footer__text-btn bm-footer__fade" {{#if property.openLinksInNewTab}}target="_blank"{{/if}}>이용약관</a>
+            {{/if}}
+          </li>
+          <li>
+            {{#if (eq property.privacyDisplayType "modal")}}
+              <button class="bm-footer__text-btn bm-footer__fade" data-modal="privacy">개인정보처리방침</button>
+            {{else}}
+              <a href="{{property.privacyLink.value}}" class="bm-footer__text-btn bm-footer__fade" {{#if property.openLinksInNewTab}}target="_blank"{{/if}}>개인정보처리방침</a>
+            {{/if}}
+          </li>
+          <li><a href="{{property.inquiryLink.value}}" class="bm-footer__text-btn bm-footer__fade" {{#if property.openLinksInNewTab}}target="_blank"{{/if}}>1:1 문의</a></li>
+        </ul>
+
+        <div class="bm-footer__company-wrapper bm-footer__fade">
+          <div class="bm-footer__company-info">
+            <dl class="bm-footer__info-item">
+              <dt>상호 : </dt>
+              <dd>{{property.companyName}}</dd>
+            </dl>
+            <span class="bm-footer__sep"> ｜ </span>
+            <dl class="bm-footer__info-item">
+              <dt>대표 : </dt>
+              <dd>{{property.representative}}</dd>
+            </dl>
+            <span class="bm-footer__sep"> ｜ </span>
+            <dl class="bm-footer__info-item">
+              <dt>개인정보관리책임자 : </dt>
+              <dd>{{property.privacyOfficer}}</dd>
+            </dl>
+          </div>
+
+          <div class="bm-footer__company-info">
+            <dl class="bm-footer__info-item">
+              <dt>전화 : </dt>
+              <dd>{{property.phone}}</dd>
+            </dl>
+            <span class="bm-footer__sep"> ｜ </span>
+            <dl class="bm-footer__info-item">
+              <dt>이메일 : </dt>
+              <dd>{{property.email}}</dd>
+            </dl>
+            <span class="bm-footer__sep"> ｜ </span>
+            <dl class="bm-footer__info-item">
+              <dt>주소 : </dt>
+              <dd>{{property.address}}</dd>
+            </dl>
+          </div>
+
+          <div class="bm-footer__company-info">
+            <dl class="bm-footer__info-item">
+              <dt>사업자등록번호 : </dt>
+              <dd>{{property.businessNumber}}</dd>
+            </dl>
+            {{#if property.onlineBusinessNumber}}
+            <span class="bm-footer__sep"> ｜ </span>
+            <dl class="bm-footer__info-item">
+              <dt>통신판매업신고번호 : </dt>
+              <dd>{{property.onlineBusinessNumber}}</dd>
+            </dl>
+            {{/if}}
+            <span class="bm-footer__sep"> ｜ </span>
+            <dl class="bm-footer__info-item">
+              <dt>호스팅 제공자 : </dt>
+              <dd><a href="https://sixshop.com" target="_blank" rel="noreferrer">{{property.hostingProvider}}</a></dd>
+            </dl>
+          </div>
+        </div>
+
+        <p class="bm-footer__copyright bm-footer__fade">{{property.copyrightText}}</p>
+      </div>
+    </div>
+
+    <div class="bm-footer__sns-wrapper bm-footer__fade">
+      {{#each property.snsLinks}}
+      <a href="{{url.value}}" class="bm-footer__sns-link" {{#if ../property.openInNewTab}}target="_blank"{{/if}} rel="noopener noreferrer">
+        {{#if (eq platform "custom")}}
+          {{#if customIcon}}
+          <img src="{{customIcon}}" alt="Custom Icon">
+          {{/if}}
+        {{else}}
+          {{#if (eq platform "instagram")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"/>
+          </svg>
+          {{/if}}
+          {{#if (eq platform "youtube")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M164.44,121.34l-48-32A8,8,0,0,0,104,96v64a8,8,0,0,0,12.44,6.66l48-32a8,8,0,0,0,0-13.32ZM120,145.05V111l25.58,17ZM234.33,69.52a24,24,0,0,0-14.49-16.4C185.56,39.88,131,40,128,40s-57.56-.12-91.84,13.12a24,24,0,0,0-14.49,16.4C19.08,79.5,16,97.74,16,128s3.08,48.5,5.67,58.48a24,24,0,0,0,14.49,16.41C69,215.56,120.4,216,127.34,216h1.32c6.94,0,58.37-.44,91.18-13.11a24,24,0,0,0,14.49-16.41c2.59-10,5.67-28.22,5.67-58.48S236.92,79.5,234.33,69.52Zm-15.49,113a8,8,0,0,1-4.77,5.49c-31.65,12.22-85.48,12-86,12H128c-.54,0-54.33.2-86-12a8,8,0,0,1-4.77-5.49C34.8,173.39,32,156.57,32,128s2.8-45.39,5.16-54.47A8,8,0,0,1,41.93,68c30.52-11.79,81.66-12,85.85-12h.27c4.2,0,55.34.19,85.85,12a8,8,0,0,1,4.77,5.49C221.2,82.61,224,99.43,224,128S221.2,173.39,218.84,182.47Z"/>
+          </svg>
+          {{/if}}
+          {{#if (eq platform "blog")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55.35 50.89" fill="currentColor">
+            <polygon points="55.35 0 55.35 50.89 36.78 50.89 18.57 25.27 18.57 50.89 0 50.89 0 0 18.57 0 36.78 26.65 36.78 0 55.35 0"/>
+          </svg>
+          {{/if}}
+          {{#if (eq platform "facebook")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256C0 376 82.7 476.8 194.2 504.5V334.2H135.9V256h58.3V222.3c0-87.1 39.4-127.5 125-127.5c16.2 0 44.2 3.2 55.7 6.4V172c-6-.6-16.5-1-29.6-1c-42 0-58.2 15.9-58.2 57.2V256h83.6l-14.4 78.2H287V510.1C413.8 494.8 512 386.9 512 256h0z"/></svg>
+          {{/if}}
+          {{#if (eq platform "twitter")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+          {{/if}}
+          {{#if (eq platform "tiktok")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/></svg>
+          {{/if}}
+          {{#if (eq platform "linkedin")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+          {{/if}}
+          {{#if (eq platform "pinterest")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 125.7-68.2 125.7-159.3 0-69-56.6-133.9-142.3-133.9-106.9 0-161 76.7-161 140.5 0 38.7 14.7 73.3 46.1 86.1 5.1 2.1 9.8.3 11.3-5.6 1.1-4.1 3.5-14.8 4.6-19.2 1.5-5.9.3-8-3.3-13.1-9.1-10.7-14.9-24.6-14.9-44.2 0-56.9 42.6-107.9 111-107.9 60.5 0 93.8 37 93.8 86.4 0 65-28.8 120-71.4 120-23.6 0-41.3-19.5-35.6-43.5 6.8-28.7 19.9-59.6 19.9-80.3 0-18.5-9.9-34-30.5-34-24.2 0-43.6 25-43.6 58.6 0 21.4 7.2 35.8 7.2 35.8s-24.7 104.7-29 123.1c-8.6 36.4-.6 81 .3 85.5.5 2.6 3.7 3.3 5.2 1.3 2.2-2.9 30.7-38 40.4-73.1 2.7-10 15.7-61.4 15.7-61.4 7.8 14.8 30.4 27.8 54.5 27.8 71.7 0 120.4-65.3 120.4-152.7 0-66-55.9-127.6-140.9-127.6z"/></svg>
+          {{/if}}
+          {{#if (eq platform "github")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 204.8 169.5 238.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+          {{/if}}
+          {{#if (eq platform "email")}}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
+          {{/if}}
+        {{/if}}
+      </a>
+      {{/each}}
+    </div>
+
+    {{#if property.showLogo}}
+    <div class="bm-footer__logo-wrapper bm-footer__fade">
+      <div class="bm-footer__logo">
+        {{#if (eq property.logoType "text")}}
+          <div class="bm-footer__logo-text">{{property.logoText}}</div>
+        {{else}}
+          {{#if property.logoImage}}
+            <img src="{{property.logoImage}}" alt="{{property.companyName}}" class="bm-footer__logo-image">
+          {{else}}
+            <div class="bm-footer__logo-text">{{property.companyName}}</div>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</footer>
+</template>
+
+<script>
+var container = bm.container;
+var context = bm.context;
+
+/* ===== 모달 처리 ===== */
+var currentModal = null;
+
+function createModal(type) {
+  var overlay = document.createElement('div');
+  overlay.className = 'bm-footer__modal-overlay';
+
+  var modalContent = document.createElement('div');
+  modalContent.className = 'bm-footer__modal-content';
+
+  var header = document.createElement('div');
+  header.className = 'bm-footer__modal-header';
+
+  var title = document.createElement('h2');
+  title.className = 'bm-footer__modal-title';
+
+  var closeBtn = document.createElement('button');
+  closeBtn.className = 'bm-footer__modal-close';
+  closeBtn.innerHTML = '&times;';
+  closeBtn.onclick = closeModal;
+
+  var body = document.createElement('div');
+  body.className = 'bm-footer__modal-body';
+
+  if (type === 'terms') {
+    title.textContent = '이용약관';
+    body.innerHTML = context.property.termsContent || '<p>이용약관 내용이 설정되지 않았습니다.</p>';
+  } else if (type === 'privacy') {
+    title.textContent = '개인정보처리방침';
+    body.innerHTML = context.property.privacyContent || '<p>개인정보처리방침 내용이 설정되지 않았습니다.</p>';
+  }
+
+  header.appendChild(title);
+  header.appendChild(closeBtn);
+  modalContent.appendChild(header);
+  modalContent.appendChild(body);
+  overlay.appendChild(modalContent);
+
+  overlay.onclick = function(e) {
+    if (e.target === overlay) closeModal();
+  };
+  modalContent.onclick = function(e) {
+    e.stopPropagation();
+  };
+
+  document.body.appendChild(overlay);
+  currentModal = overlay;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  if (currentModal) {
+    document.body.removeChild(currentModal);
+    currentModal = null;
+    document.body.style.overflow = '';
+  }
+}
+
+function handleEsc(e) {
+  if (e.key === 'Escape' && currentModal) closeModal();
+}
+
+/* ===== 이벤트 위임 ===== */
+container.addEventListener('click', function(e) {
+  var modalBtn = e.target.closest('button[data-modal]');
+  if (modalBtn) {
+    e.preventDefault();
+    createModal(modalBtn.getAttribute('data-modal'));
+  }
+}, true);
+
+document.addEventListener('keydown', handleEsc);
+
+/* ===== 컨텍스트 변경 ===== */
+bm.onContextChange = function() {
+  // 설정 변경 시 자동 반영
+};
+
+/* ===== 클린업 ===== */
+bm.onDestroy = function() {
+  if (currentModal) closeModal();
+  document.removeEventListener('keydown', handleEsc);
+};
+</script>
+
+{"settings":[{"type":"TITLE","content":"누끼토끼 전문 개발 블록"},{"type":"DESCRIPTION","content":"【 안내 】\n코드 없이 직접 운영하실 수 있도록\n전문 개발자가 기획·설계·구현했습니다.\n간단한 수정은 블록 AI를 활용하시고,\n고도화된 커스텀이 필요하시면\n전문가에게 의뢰해 주세요."},{"type":"TITLE","content":"레이아웃 설정"},{"type":"RANGE","id":"maxWidth","label":"최대 가로폭","min":800,"max":1400,"step":50,"unit":"px","default":1200},{"type":"COLOR_PICKER","id":"backgroundColor","label":"배경색","default":"#3B2E2A"},{"type":"COLOR_PICKER","id":"textColor","label":"텍스트 색상","default":"#FAF8F5"},{"type":"COLOR_PICKER","id":"dividerColor","label":"구분선 색상","default":"#8C6F5E"},{"type":"TITLE","content":"회사 정보"},{"type":"TEXT","id":"companyName","label":"상호","default":"셀포슬린"},{"type":"TEXT","id":"representative","label":"대표","default":"김주희"},{"type":"TEXT","id":"privacyOfficer","label":"개인정보관리책임자","default":"김주희"},{"type":"TEXT","id":"phone","label":"전화","default":"0502-1934-1136"},{"type":"TEXT","id":"email","label":"이메일","default":"kjh@selporcelain.kr"},{"type":"TEXT","id":"address","label":"주소","default":"경상남도 양산시 물금읍 청운로 50, 지하1층 102호 (대로변 1층)"},{"type":"TEXT","id":"businessNumber","label":"사업자등록번호","default":"474-37-01040"},{"type":"TEXT","id":"onlineBusinessNumber","label":"통신판매업신고번호","default":""},{"type":"TEXT","id":"hostingProvider","label":"호스팅 제공자","default":"주식회사 식스샵"},{"type":"TEXT","id":"copyrightText","label":"저작권 텍스트","default":"©Selporcelain. 2025 ALL RIGHTS RESERVED"},{"type":"TITLE","content":"링크 설정"},{"type":"RADIO","id":"termsDisplayType","label":"이용약관 표시 방식","options":[{"value":"link","label":"링크로 이동"},{"value":"modal","label":"모달창으로 표시"}],"default":"link"},{"type":"LINK","id":"termsLink","label":"이용약관 링크","isVisible":"property.termsDisplayType === 'link'"},{"type":"RICH_TEXT","id":"termsContent","label":"이용약관 내용","isVisible":"property.termsDisplayType === 'modal'","default":""},{"type":"RADIO","id":"privacyDisplayType","label":"개인정보처리방침 표시 방식","options":[{"value":"link","label":"링크로 이동"},{"value":"modal","label":"모달창으로 표시"}],"default":"link"},{"type":"LINK","id":"privacyLink","label":"개인정보처리방침 링크","isVisible":"property.privacyDisplayType === 'link'"},{"type":"RICH_TEXT","id":"privacyContent","label":"개인정보처리방침 내용","isVisible":"property.privacyDisplayType === 'modal'","default":""},{"type":"LINK","id":"inquiryLink","label":"1:1 문의 링크"},{"type":"CHECKBOX","id":"openLinksInNewTab","label":"링크를 새 탭에서 열기","default":false},{"type":"TITLE","content":"로고 설정"},{"type":"CHECKBOX","id":"showLogo","label":"로고 표시","default":true},{"type":"RADIO","id":"logoType","label":"로고 타입","options":[{"value":"text","label":"텍스트"},{"value":"image","label":"이미지"}],"default":"text","isVisible":"property.showLogo === true"},{"type":"TEXT","id":"logoText","label":"로고 텍스트","default":"Perléa","isVisible":"property.showLogo === true && property.logoType === 'text'"},{"type":"IMAGE_PICKER","id":"logoImage","label":"로고 이미지","isVisible":"property.showLogo === true && property.logoType === 'image'"},{"type":"RANGE","id":"logoSizeDesktop","label":"로고 크기 (데스크톱)","min":5,"max":20,"step":1,"unit":"vw","default":5,"isVisible":"property.showLogo === true && property.logoType === 'text'"},{"type":"RANGE","id":"logoSizeTablet","label":"로고 크기 (태블릿)","min":5,"max":25,"step":1,"unit":"vw","default":9,"isVisible":"property.showLogo === true && property.logoType === 'text'"},{"type":"RANGE","id":"logoSizeMobile","label":"로고 크기 (모바일)","min":10,"max":30,"step":1,"unit":"vw","default":10,"isVisible":"property.showLogo === true && property.logoType === 'text'"},{"type":"RANGE","id":"logoImageWidth","label":"로고 이미지 최대 너비","min":50,"max":400,"step":10,"unit":"px","default":200,"isVisible":"property.showLogo === true && property.logoType === 'image'"},{"type":"SELECT","id":"logoAlignment","label":"로고 정렬","options":[{"value":"left","label":"왼쪽"},{"value":"center","label":"가운데"},{"value":"right","label":"오른쪽"}],"default":"left","isVisible":"property.showLogo === true"},{"type":"COLOR_PICKER","id":"logoColor","label":"로고 텍스트 색상","default":"#C4A882","isVisible":"property.showLogo === true && property.logoType === 'text'"},{"type":"SELECT","id":"logoFontFamily","label":"로고 폰트","options":[{"value":"heading","label":"헤딩 폰트"},{"value":"body","label":"본문 폰트"},{"value":"serif","label":"세리프"},{"value":"sans-serif","label":"산세리프"}],"default":"heading","isVisible":"property.showLogo === true && property.logoType === 'text'"},{"type":"TITLE","content":"SNS 링크 설정"},{"type":"LIST","id":"snsLinks","label":"SNS 링크","maxCount":10,"settings":[{"type":"SELECT","id":"platform","label":"플랫폼","options":[{"value":"instagram","label":"Instagram"},{"value":"youtube","label":"YouTube"},{"value":"blog","label":"네이버 블로그"},{"value":"facebook","label":"Facebook"},{"value":"twitter","label":"Twitter (X)"},{"value":"tiktok","label":"TikTok"},{"value":"linkedin","label":"LinkedIn"},{"value":"pinterest","label":"Pinterest"},{"value":"github","label":"GitHub"},{"value":"email","label":"이메일"},{"value":"custom","label":"커스텀 아이콘"}],"default":"instagram"},{"type":"LINK","id":"url","label":"링크 URL"},{"type":"IMAGE_PICKER","id":"customIcon","label":"커스텀 아이콘 이미지","isVisible":"property.snsLinks[index].platform === 'custom'"}]},{"type":"CHECKBOX","id":"openInNewTab","label":"SNS 링크 새 탭에서 열기","default":true},{"type":"CHECKBOX","id":"snsIconBgEnabled","label":"동그라미 배경 사용","default":false},{"type":"COLOR_PICKER","id":"snsIconBgColor","label":"동그라미 배경 색상","default":"#4A3F38","isVisible":"property.snsIconBgEnabled === true"},{"type":"RANGE","id":"snsIconPadding","label":"동그라미 안쪽 여백","min":4,"max":16,"step":1,"unit":"px","default":8,"isVisible":"property.snsIconBgEnabled === true"},{"type":"COLOR_PICKER","id":"snsIconColor","label":"SNS 아이콘 색상","default":"#FAF8F5"},{"type":"RANGE","id":"snsIconSize","label":"SNS 아이콘 크기","min":16,"max":48,"step":1,"unit":"px","default":24}],"property":{"maxWidth":1200,"backgroundColor":"#3B2E2A","textColor":"#FAF8F5","dividerColor":"#8C6F5E","companyName":"Perléa","representative":"최토식이","privacyOfficer":"최토식이","phone":"031-1004-1004","email":"admin@tosikee.co.kr","address":"토식이는 먹는 것을 좋아해서 살이 뒤룩뒤룩 쪘어요","businessNumber":"111-22-33333","onlineBusinessNumber":"","hostingProvider":"토식이는 먹고 오늘 또 먹어요","copyrightText":"©Perléa. 2025 ALL RIGHTS RESERVED","termsDisplayType":"link","termsLink":{"id":null,"type":"","label":"","value":"/terms/policy"},"termsContent":"","privacyDisplayType":"link","privacyLink":{"id":null,"type":"","label":"","value":"/terms/privacy"},"privacyContent":"","inquiryLink":{"id":null,"type":"","label":"","value":"/qna/form"},"openLinksInNewTab":false,"showLogo":true,"logoType":"text","logoText":"Perléa","logoImage":"","logoSizeDesktop":5,"logoSizeTablet":9,"logoSizeMobile":10,"logoImageWidth":200,"logoAlignment":"left","logoColor":"#C4A882","logoFontFamily":"heading","snsLinks":[{"platform":"instagram","url":{"type":"","label":"","value":""},"customIcon":""},{"platform":"blog","url":{"type":"","label":"","value":""},"customIcon":""}],"openInNewTab":true,"snsIconBgEnabled":false,"snsIconBgColor":"#4A3F38","snsIconPadding":8,"snsIconColor":"#FAF8F5","snsIconSize":24}}
+
